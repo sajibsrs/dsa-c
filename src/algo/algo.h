@@ -3,6 +3,8 @@
 
 /**************************************************
  * - Recursions
+ * -- Fibonacci
+ * -- Factorial
  **************************************************/
 
 /**
@@ -20,5 +22,20 @@ int fibonacci_rec(int n);
  * @return `nth` fibonacci number.
  */
 int fibonacci_trc(int n, int a, int b);
+
+/**
+ * @brief Get factorial of a number with recursion.
+ * @param n Number.
+ * @return Factorial.
+ */
+int factorial_rec(int n);
+
+/**
+ * @brief Get factorial of a number with tail-recursion.
+ * @param n Number.
+ * @param a Accumulator.
+ * @return Factorial.
+ */
+int factorial_trc(int n, int a);
 
 #endif
