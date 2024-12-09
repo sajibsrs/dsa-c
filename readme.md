@@ -7,7 +7,6 @@
 - [Standard Recursion](docs/recursion.md#standard-recursion)
 - [Tail-Recursion](docs/recursion.md#tail-recursion)
 
-
 ## Testing
 ```cmake
 # Enable testing
