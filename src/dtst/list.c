@@ -3,7 +3,7 @@
 
 #include "dtst.h"
 
-void list_init(List *list, void (*destroy)(void *data)) {
+void list_init(List *list, DestroyFP destroy) {
     list->size    = 0;
     list->head    = NULL;
     list->tail    = NULL;
