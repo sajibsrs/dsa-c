@@ -1,6 +1,10 @@
 # Data Structures and Algorithms in C
 
 ## Data Structures
+### Linked Lists
+- [Singly Linked-List](docs/linked-list.md#singly-linked-list)
+- Doubly Linked-List
+- Circular List
 
 ## Algorithms
 ### Recursions
