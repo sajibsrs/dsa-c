@@ -1,14 +1,15 @@
-# Linked-List
+# Linked-Lists
 
-## Files
+## Singly Linked-list
+### Files
 - Header file: [dtst.h](../src/dtst/dtst.h)
 - Source file: [list.c](../src/dtst/list.c)
 
-## Definitions
+### Definitions
 
-## Functions
+### Functions
 
-## Macros
+### Macros
 
 **Usage:**
 ```c
@@ -67,3 +68,7 @@ int main() {
 Task Name: Task 1, Priority: 1
 Task Name: Task 2, Priority: 2
 ```
+
+## Doubly Linked-List
+
+## Circular Linked-List
