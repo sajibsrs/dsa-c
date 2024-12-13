@@ -66,7 +66,7 @@ int list_ins_next(List *list, ListElem *elem, const void *data) {
 /**
  * @brief Removes an element just after `elem`. If `elem` is `NULL`, the element at the head of the
  * list gets removed.
- * @param list listLinked list pointer.
+ * @param list Linked list pointer.
  * @param elem Element, after which the element would be removed.
  * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
  * @return `0` on Success, `-1` on failure.
