@@ -5,7 +5,7 @@
  * - Linked List
  **************************************************/
 
-// Define linked list element
+// Defines linked list element
 typedef struct ListElem_ {
     void             *data;
     struct ListElem_ *next;
@@ -14,7 +14,7 @@ typedef struct ListElem_ {
 typedef int  (*MatchFP)(const void *key1, const void *key2);
 typedef void (*DestroyFP)(void *data);
 
-// Define linked list
+// Defines linked list
 typedef struct List_ {
     int size;
 
@@ -26,14 +26,14 @@ typedef struct List_ {
 } List;
 
 /**
- * @brief Initialize a linked list.
+ * @brief Initializes a linked list.
  * @param list Linked list.
  * @param destroy Linked list destroy callback function.
  */
 void list_init(List *list, DestroyFP destroy);
 
 /**
- * @brief Deallocate a Linked list.
+ * @brief Deallocates a Linked list.
  * @param list Linked list.
  */
 void list_destroy(List *list);
@@ -86,6 +86,7 @@ int list_rem_next(List *list, ListElem *elem, void **data);
 
 typedef int (*HashFP)(const void *key);
 
+// Defines chained hash table.
 typedef struct CHTbl_ {
     int buckets;
 
@@ -97,10 +98,25 @@ typedef struct CHTbl_ {
     List *table;
 } CHTbl;
 
+/**
+ * @brief Initializes the chained hash table specified by `htbl`.
+ * @param htbl The chained hash table pointer, that being initialized.
+ * @param buckets Number of buckets.
+ * @param h Hash function.
+ * @param match Function to match two keys.
+ * @param destroy Function to free dynamically allocated memory.
+ * @return `0` if initializing the hash table is successful, or `–1` otherwise.
+ */
 int  chtbl_init(CHTbl *htbl, int buckets, HashFP h, MatchFP match, DestroyFP destroy);
+
+/**
+ * @brief Destroys the chained hash table specified by `htbl`.
+ * @param htbl The chained hash table, that being destroyed.
+ */
 void chtbl_destroy(CHTbl *htbl);
 int  chtbl_insert(CHTbl *htbl, const void *data);
 int  chtbl_remove(CHTbl *htbl, void **data);
+int  chtbl_lookup(const CHTbl *htbl, void **data);
 
 #define chtbl_size(htbl) ((htbl)->size)
 
