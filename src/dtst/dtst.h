@@ -37,11 +37,43 @@ void list_init(List *list, DestroyFP destroy);
  * @param list Linked list.
  */
 void list_destroy(List *list);
-int  list_ins_next(List *list, ListElem *elem, const void *data);
-int  list_rem_next(List *list, ListElem *elem, void **data);
 
+/**
+ * @brief Inserts an element just after `elem`. If `elem` is `NULL`, the new element is inserted at
+ * the head of the list.
+ * @param list Linked list pointer.
+ * @param elem Element, after which the new element would be inserted.
+ * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
+ * @return `0` on Success, `-1` on failure.
+ */
+int list_ins_next(List *list, ListElem *elem, const void *data);
+
+/**
+ * @brief Removes an element just after `elem`. If `elem` is `NULL`, the element at the head of the
+ * list gets removed.
+ * @param list Linked list pointer.
+ * @param elem Element, after which the element would be removed.
+ * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
+ * @return `0` on Success, `-1` on failure.
+ */
+int list_rem_next(List *list, ListElem *elem, void **data);
+
+/**
+ * @brief Returns the size of the list.
+ * @param list Linked list pointer.
+ */
 #define list_size(list) ((list)->size)
+
+/**
+ * @brief Returns the head of the list.
+ * @param list Linked list pointer.
+ */
 #define list_head(list) ((list)->head)
+
+/**
+ * @brief Returns the tail of the list.
+ * @param list Linked list pointer.
+ */
 #define list_tail(list) ((list)->tail)
 #define list_is_head(list, elem) ((elem) == (list)->head ? 1 : 0)
 #define list_is_tail(list, elem) ((elem) == (list)->tail ? 1 : 0)
