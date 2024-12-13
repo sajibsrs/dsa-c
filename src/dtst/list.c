@@ -3,6 +3,11 @@
 
 #include "dtst.h"
 
+/**
+ * @brief Initialize a linked list.
+ * @param list Linked list.
+ * @param destroy Linked list destroy callback function.
+ */
 void list_init(List *list, DestroyFP destroy) {
     list->size    = 0;
     list->head    = NULL;
@@ -10,6 +15,10 @@ void list_init(List *list, DestroyFP destroy) {
     list->destroy = destroy;
 }
 
+/**
+ * @brief Deallocate a Linked list.
+ * @param list Linked list.
+ */
 void list_destroy(List *list) {
     void *data;
 
@@ -21,6 +30,14 @@ void list_destroy(List *list) {
     memset(list, 0, sizeof(List));
 }
 
+/**
+ * @brief Inserts an element just after `elem`. If `elem` is `NULL`, the new element is inserted at
+ * the head of the list.
+ * @param list Linked list pointer.
+ * @param elem Element, after which the new element would be inserted.
+ * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
+ * @return `0` on Success, `-1` on failure.
+ */
 int list_ins_next(List *list, ListElem *elem, const void *data) {
     ListElem *new_elem;
 
@@ -46,6 +63,14 @@ int list_ins_next(List *list, ListElem *elem, const void *data) {
     return 0;
 }
 
+/**
+ * @brief Removes an element just after `elem`. If `elem` is `NULL`, the element at the head of the
+ * list gets removed.
+ * @param list listLinked list pointer.
+ * @param elem Element, after which the element would be removed.
+ * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
+ * @return `0` on Success, `-1` on failure.
+ */
 int list_rem_next(List *list, ListElem *elem, void **data) {
     ListElem *old_elem;
 
