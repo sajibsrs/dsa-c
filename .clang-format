@@ -9,6 +9,6 @@ AlignConsecutiveDeclarations:
     Enabled: true
     AlignFunctionDeclarations: true
     AlignFunctionPointers: true
-AlignConsecutiveAssignments: Consecutive
+# AlignConsecutiveAssignments: Consecutive
 AlignArrayOfStructures: Left
 AlignAfterOpenBracket: BlockIndent
