@@ -6,16 +6,9 @@
 - Doubly Linked-List
 - Circular List
 
-### Stack & Queue
+### Stacks & Queues
 - Stack
 - Queue
-
-### Sets
-- Sets
-
-### Hash Tables
-- Chained hash table
-- Open-addressed hash table
 
 ### Trees
 - Binary trees
@@ -24,6 +17,26 @@
 ### Heaps & Priority Queues
 - Heaps
 - Priority queues
+
+### Sparial Trees
+- Quad trees
+- k-d trees
+
+### Sets
+- Sets
+
+### Hash Tables
+- Chained hash table
+- Open-addressed hash table
+
+### B-Trees
+
+### Bloom Filters
+
+### Skip Lists
+
+### Grids
+- Grids
 
 ### Graphs
 - Graphs
@@ -57,6 +70,8 @@
 - DES
 - AES
 - RSA
+
+### Grid Algorithms
 
 ### Graph Algorithms
 - Minimum spanning trees
