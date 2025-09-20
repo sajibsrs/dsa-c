@@ -1,39 +1,40 @@
-#ifndef _DTST_H
-#define _DTST_H
+#ifndef DTST_H
+#define DTST_H
+
+#include <stdbool.h>
 
 /**************************************************
- * - Linked List
+ * - Linked Lists
+ * -- Singly linked list / Linked list
+ * -- Doubly linked list
  **************************************************/
 
-// Defines linked list element
+// Defines structure for linked list element.
 typedef struct ListElem_ {
     void             *data;
     struct ListElem_ *next;
 } ListElem;
 
-typedef int  (*MatchFP)(const void *key1, const void *key2);
-typedef void (*DestroyFP)(void *data);
-
-// Defines linked list
+// Defines structure for linked list.
 typedef struct List_ {
-    int size;
-
-    MatchFP   match;
-    DestroyFP destroy;
-
+    int       size;
+    int       (*match)(const void *key1, const void *key2);
+    void      (*destroy)(void *data);
     ListElem *head;
     ListElem *tail;
 } List;
 
 /**
- * @brief Initializes a linked list.
+ * @brief Initializes a linked list. Provide a callback function to handle what happens
+ * to the dynamically allocated `data`.
  * @param list Linked list.
  * @param destroy Linked list destroy callback function.
  */
-void list_init(List *list, DestroyFP destroy);
+void list_init(List *list, void (*destroy)(void *data));
 
 /**
- * @brief Deallocates a Linked list.
+ * @brief Resets a Linked list. It doesn't "fee" the memory held by the list itself.
+ * Freeing memory is the callers responsibility.
  * @param list Linked list.
  */
 void list_destroy(List *list);
@@ -44,9 +45,9 @@ void list_destroy(List *list);
  * @param list Linked list pointer.
  * @param elem Element, after which the new element would be inserted.
  * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
- * @return `0` on Success, `-1` on failure.
+ * @return boolean true on success and false on failure.
  */
-int list_ins_next(List *list, ListElem *elem, const void *data);
+bool list_ins_next(List *list, ListElem *elem, const void *data);
 
 /**
  * @brief Removes an element just after `elem`. If `elem` is `NULL`, the element at the head of the
@@ -54,70 +55,56 @@ int list_ins_next(List *list, ListElem *elem, const void *data);
  * @param list Linked list pointer.
  * @param elem Element, after which the element would be removed.
  * @param data Element data pointer. It is callers responsibility to manage storage for `data`.
- * @return `0` on Success, `-1` on failure.
+ * @return boolean true on success and false on failure.
  */
-int list_rem_next(List *list, ListElem *elem, void **data);
+bool list_rem_next(List *list, ListElem *elem, void **data);
 
 /**
- * @brief Returns the size of the list.
+ * @brief Macro: Returns the size of the list.
  * @param list Linked list pointer.
  */
 #define list_size(list) ((list)->size)
 
 /**
- * @brief Returns the head of the list.
+ * @brief Macro: Returns the head of the list.
  * @param list Linked list pointer.
  */
 #define list_head(list) ((list)->head)
 
 /**
- * @brief Returns the tail of the list.
+ * @brief Macro: Returns the tail of the list.
  * @param list Linked list pointer.
  */
 #define list_tail(list) ((list)->tail)
-#define list_is_head(list, elem) ((elem) == (list)->head ? 1 : 0)
-#define list_is_tail(list, elem) ((elem) == (list)->tail ? 1 : 0)
+
+/**
+ * @brief Macro: Determines if the `elem` is head of the list.
+ * @param list List pointer.
+ * @param elem Element pointer.
+ */
+#define list_is_head(list, elem) ((elem) == (list)->head ? true : false)
+
+/**
+ * @brief Macro: Determines if the `elem` is tail of the list.
+ * @param list List pointer.
+ * @param elem Element pointer.
+ */
+#define list_is_tail(list, elem) ((elem) == (list)->tail ? true : false)
+
+/**
+ * @brief Macro: Returns the data stored in the list element.
+ * @param elem List element pointer.
+ */
 #define list_data(elem) ((elem)->data)
+
+/**
+ * @brief Macro: Returns the next element in the list.
+ * @param elem List element pointer.
+ */
 #define list_next(elem) ((elem)->next)
 
 /**************************************************
  * - Chained Hash Table
  **************************************************/
-
-typedef int (*HashFP)(const void *key);
-
-// Defines chained hash table.
-typedef struct CHTbl_ {
-    int buckets;
-
-    HashFP    h;
-    MatchFP   match;
-    DestroyFP destroy;
-
-    int   size;
-    List *table;
-} CHTbl;
-
-/**
- * @brief Initializes the chained hash table specified by `htbl`.
- * @param htbl The chained hash table pointer, that being initialized.
- * @param buckets Number of buckets.
- * @param h Hash function.
- * @param match Function to match two keys.
- * @param destroy Function to free dynamically allocated memory.
- * @return `0` if initializing the hash table is successful, or `–1` otherwise.
- */
-int  chtbl_init(CHTbl *htbl, int buckets, HashFP h, MatchFP match, DestroyFP destroy);
-
-/**
- * @brief Destroys the chained hash table specified by `htbl`.
- * @param htbl The chained hash table, that being destroyed.
- */
-void chtbl_destroy(CHTbl *htbl);
-int  chtbl_insert(CHTbl *htbl, const void *data);
-int  chtbl_remove(CHTbl *htbl, void **data);
-int  chtbl_lookup(const CHTbl *htbl, void **data);
-
-#define chtbl_size(htbl) ((htbl)->size)
 
 #endif
