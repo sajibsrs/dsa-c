@@ -89,13 +89,17 @@
 include(CTest)
 enable_testing()
 
-# Tests
-add_test(NAME fib_rec COMMAND dsa)
-add_test(NAME fib_trc COMMAND dsa)
+# Test executables
+add_executable(test_slist tests/slist_test.c ${LIB_SRC})
+target_include_directories(test_slist PRIVATE src src/dtst)
+
+# Registers tests
+add_test(NAME TestSList COMMAND test_slist)
 ```
 
 Run:
 
 ```terminal
-ctest
+cmake --build build
+ctest --build-dir build // or `cd build` and run `ctest`
 ```
