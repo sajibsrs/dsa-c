@@ -12,7 +12,7 @@
  * @param len Length of the array.
  * @return
  */
-void ins_sort(int arr[], int len);
+void ins_srt(int arr[], int len);
 
 /**************************************************
  * - Recursions
