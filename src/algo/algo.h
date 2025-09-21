@@ -1,5 +1,18 @@
-#ifndef _ALGO_H
-#define _ALGO_H
+#ifndef ALGO_H
+#define ALGO_H
+
+/**************************************************
+ * - Sorting
+ * -- Insertion
+ **************************************************/
+
+/**
+ * @brief Sorts an array of integers in ascending order using the insertion sort algorithm.
+ * @param arr Array of integers.
+ * @param len Length of the array.
+ * @return
+ */
+void ins_sort(int arr[], int len);
 
 /**************************************************
  * - Recursions
@@ -12,7 +25,7 @@
  * @param n Total steps.
  * @return `nth` fibonacci number.
  */
-int fibonacci_rec(int n);
+int fib_rec(int n);
 
 /**
  * @brief Get `nth` fibonacci number using tail-recursion.
@@ -21,14 +34,14 @@ int fibonacci_rec(int n);
  * @param b Number for the next step (starting with Fib(1)).
  * @return `nth` fibonacci number.
  */
-int fibonacci_trc(int n, int a, int b);
+int fib_trc(int n, int a, int b);
 
 /**
  * @brief Get factorial of a number with recursion.
  * @param n Number.
  * @return Factorial.
  */
-int factorial_rec(int n);
+int fact_rec(int n);
 
 /**
  * @brief Get factorial of a number with tail-recursion.
@@ -36,6 +49,6 @@ int factorial_rec(int n);
  * @param a Accumulator.
  * @return Factorial.
  */
-int factorial_trc(int n, int a);
+int fact_trc(int n, int a);
 
 #endif
