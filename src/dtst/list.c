@@ -1,73 +1,155 @@
-#include <stdlib.h>
-#include <string.h>
-
 #include "dtst.h"
 
-void list_init(List *list, void (*destroy)(void *data)) {
-    list->size = 0;
+/**************************************************
+ * Singly linked list
+ **************************************************/
+
+void slist_init(slist_t *list, void (*destroy)(void *data)) {
     list->head = NULL;
     list->tail = NULL;
+    list->size = 0;
     list->destroy = destroy;
 }
 
-void list_destroy(List *list) {
-    void *data;
+bool slist_ins_head(slist_t *list, void *data) {
+    slist_node_t *new_node = malloc(sizeof(slist_node_t));
+    if (!new_node) return false;
 
-    while (list_size(list) > 0) {
-        if (list_rem_next(list, NULL, (void **)&data) == 0 && list->destroy != NULL) {
-            list->destroy(data);
-        }
+    new_node->data = data;
+    new_node->next = list->head;
+    list->head = new_node;
+
+    if (list->tail == NULL) {
+        list->tail = new_node;
     }
-    memset(list, 0, sizeof(List));
-}
 
-bool list_ins_next(List *list, ListElem *elem, const void *data) {
-    ListElem *new_elem;
-
-    if ((new_elem = malloc(sizeof(ListElem))) == NULL) return false;
-
-    new_elem->data = (void *)data;
-
-    if (elem == NULL) {
-        if (list_size(list) == 0) {
-            list->tail = new_elem;
-        }
-        new_elem->next = list->head;
-        list->head = new_elem;
-    } else {
-        if (elem->next == NULL) {
-            list->tail = new_elem;
-        }
-        new_elem->next = elem->next;
-        elem->next = new_elem;
-    }
     list->size++;
     return true;
 }
 
-bool list_rem_next(List *list, ListElem *elem, void **data) {
-    ListElem *old_elem;
-
-    if (list_size(list) == 0) return false;
-
-    if (elem == NULL) {
-        *data = list->head->data;
-        old_elem = list->head;
-        list->head = list->head->next;
-
-        if (list_size(list) == 1) list->tail = NULL;
-    } else {
-        if (elem->next == NULL) return false;
-
-        *data = elem->next->data;
-        old_elem = elem->next;
-        elem->next = elem->next->next;
-
-        if (elem->next == NULL) {
-            list->tail = elem;
-        }
+bool slist_rem_tail(slist_t *list, void **data) {
+    if (list->head == NULL) {
+        return false;
     }
-    free(old_elem);
+
+    if (data) {
+        *data = list->tail->data;
+    }
+
+    // Single node case
+    if (list->head == list->tail) {
+        free(list->tail);
+        list->head = NULL;
+        list->tail = NULL;
+    } else {
+        // Find node before tail
+        slist_node_t *curr = list->head;
+        while (curr->next != list->tail) {
+            curr = curr->next;
+        }
+
+        free(list->tail);
+        curr->next = NULL;
+        list->tail = curr;
+    }
+
     list->size--;
     return true;
+}
+
+void slist_rem_all(slist_t *list) {
+    slist_node_t *curr = list->head;
+
+    while (curr != NULL) {
+        slist_node_t *next = curr->next;
+
+        if (list->destroy) {
+            list->destroy(curr->data);
+        }
+
+        free(curr);
+        curr = next;
+    }
+
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+}
+
+/**************************************************
+ * Doubly linked list
+ **************************************************/
+
+void dlist_init(dlist_t *list, void (*destroy)(void *data)) {
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+    list->destroy = destroy;
+}
+
+bool dlist_ins_head(dlist_t *list, void *data) {
+    dlist_node_t *new_node = malloc(sizeof(dlist_node_t));
+    if (!new_node) return false;
+
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = list->head;
+
+    if (list->head != NULL) {
+        list->head->prev = new_node;
+    }
+
+    list->head = new_node;
+
+    if (list->tail == NULL) {
+        list->tail = new_node;
+    }
+
+    list->size++;
+    return true;
+}
+
+bool dlist_rem_tail(dlist_t *list, void **data) {
+    if (list->tail == NULL) {
+        return false;
+    }
+
+    dlist_node_t *old_tail = list->tail;
+
+    if (data) {
+        *data = old_tail->data;
+    }
+
+    if (list->head == list->tail) {
+        // Only one node in the list
+        list->head = NULL;
+        list->tail = NULL;
+    } else {
+        // Multiple nodes, update tail and next pointers
+        list->tail = old_tail->prev;
+        list->tail->next = NULL;
+    }
+
+    free(old_tail);
+    list->size--;
+    return true;
+}
+
+void dlist_rem_all(dlist_t *list) {
+    dlist_node_t *curr = list->head;
+
+    while (curr != NULL) {
+        dlist_node_t *next = curr->next;
+
+        if (list->destroy) {
+            list->destroy(curr->data);
+        }
+
+        free(curr);
+        curr = next;
+    }
+
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
 }
