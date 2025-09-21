@@ -101,5 +101,5 @@ Run:
 
 ```terminal
 cmake --build build
-ctest --build-dir build // or `cd build` and run `ctest`
+ctest --test-dir build // or `cd build` and run `ctest`
 ```
