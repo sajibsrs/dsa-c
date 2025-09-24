@@ -28,9 +28,9 @@ typedef struct slist {
 } slist_t;
 
 void slist_init(slist_t *list, void (*destroy)(void *data));
-bool slist_ins_head(slist_t *list, void *data);
-bool slist_rem_tail(slist_t *list, void **data);
-void slist_rem_all(slist_t *list);
+bool slist_head_ins(slist_t *list, void *data);
+bool slist_tail_rem(slist_t *list, void **data);
+void slist_rem(slist_t *list);
 
 /*-------------------------------------------------
  * Doubly linked list
@@ -50,8 +50,24 @@ typedef struct dlist {
 } dlist_t;
 
 void dlist_init(dlist_t *list, void (*destroy)(void *data));
-bool dlist_ins_head(dlist_t *list, void *data);
-bool dlist_rem_tail(dlist_t *list, void **data);
-void dlist_rem_all(dlist_t *list);
+bool dlist_head_ins(dlist_t *list, void *data);
+bool dlist_tail_rem(dlist_t *list, void **data);
+void dlist_rem(dlist_t *list);
+
+/*-------------------------------------------------
+ * Trie
+ *-------------------------------------------------*/
+
+#define TRIE_SIZE 26
+
+typedef struct trie {
+    bool         is_end;
+    struct trie *child[TRIE_SIZE];
+} trie_t;
+
+trie_t *trie_node_new(void);
+void    trie_ins(trie_t *root, const char *word);
+bool    trie_find(trie_t *root, const char *word);
+void    trie_free(trie_t *root);
 
 #endif
