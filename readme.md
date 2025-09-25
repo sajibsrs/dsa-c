@@ -76,7 +76,7 @@
 - RSA
 
 ### Tree Algorithms
-- Pre-ordere traversal
+- Pre-order traversal
 - In-order traversal
 - Post-order traversal
 
