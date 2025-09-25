@@ -13,6 +13,9 @@
 ### Trees
 - Binary trees
 - Binary search trees
+- AVL trees
+- B-trees
+- Tries
 
 ### Heaps & Priority Queues
 - Heaps
@@ -26,10 +29,11 @@
 - Sets
 
 ### Hash Tables
-- Chained hash table
-- Open-addressed hash table
-
-### B-Trees
+- Hash tables
+  - Chained hash table
+  - Open-addressed hash table
+- Hash sets
+- Hash maps
 
 ### Bloom Filters
 
@@ -71,11 +75,24 @@
 - AES
 - RSA
 
+### Tree Algorithms
+- Pre-ordere traversal
+- In-order traversal
+- Post-order traversal
+
 ### Grid Algorithms
+- Nearest neighbor
 
 ### Graph Algorithms
 - Minimum spanning trees
+  - Prim's
+  - Kruskal's
 - Shortest paths
+  - Dijkstra's
+  - Bellman-Ford
+- Maximum flow
+  - Ford-Fukerson
+  - Edmonds-Karp
 - Traveling salesman
 
 ### Geometric Algorithms
