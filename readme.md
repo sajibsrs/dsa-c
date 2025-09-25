@@ -107,11 +107,11 @@ include(CTest)
 enable_testing()
 
 # Test executables
-add_executable(test_slist tests/slist_test.c ${LIB_SRC})
-target_include_directories(test_slist PRIVATE src src/dtst)
+add_executable(slist_test tests/slist_test.c ${LIB_SRC})
+target_include_directories(slist_test PRIVATE src src/dtst)
 
 # Registers tests
-add_test(NAME TestSList COMMAND test_slist)
+add_test(NAME TestSList COMMAND slist_test)
 ```
 
 Run:
