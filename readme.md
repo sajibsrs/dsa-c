@@ -21,7 +21,7 @@
 - Heaps
 - Priority queues
 
-### Sparial Trees
+### Spatial Trees
 - Quad trees
 - k-d trees
 
