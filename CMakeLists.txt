@@ -18,7 +18,11 @@ target_include_directories(dlist_test PRIVATE src src/dtst)
 add_executable(trie_test tests/trie_test.c ${LIB_SRC})
 target_include_directories(trie_test PRIVATE src src/dtst)
 
+add_executable(graph_test tests/graph_test.c ${LIB_SRC})
+target_include_directories(graph_test PRIVATE src src/dtst)
+
 # Registers tests
 add_test(NAME slist_test COMMAND slist_test)
 add_test(NAME dlist_test COMMAND dlist_test)
 add_test(NAME trie_test COMMAND trie_test)
+add_test(NAME graph_test COMMAND graph_test)
