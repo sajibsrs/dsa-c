@@ -11,7 +11,7 @@ A **graph** is a non-linear data structure consists of nodes (much like other no
 - **Loop:** A loop, also called a self-loop, is an edge that begins and ends on the same vertex. A loop is a cycle that only consists of one edge.
 
 ## Adjacency Matrix
-The adjacency matrix is a 2D array (matrix) where each cell on index (i,j) stores information about the edge from vertex i to vertex j.
+The adjacency matrix is a 2D array (matrix) where each cell on index *(i, j)* stores information about the edge from vertex i to vertex j.
 
 **Example 1:** Say, we have a undirected graph, each vertex is labeled A,B,C,D. Where A connecting B,C,D. B connecting C. Since it's undirected and unweighted, we can describe this in matrix like:
 
@@ -36,12 +36,14 @@ B | 0 0 0 0
 C | 0 1 0 0
 D | 4 0 0 0
 ```
-While 2D array can be used in adjacency matrix, it wastes memory. As can be seen from the examples, most of the cells are empty. A better approach would be to use array and linked-list (hybrid) solution.
+While 2D array can be used in adjacency matrix, it wastes memory. As can be seen from the examples, most of the cells are empty. A better approach would be to use array and linked-list (hybrid) approach.
 
 ## Adjacency List
-Here we have an array of the vertices A,B,C,D then linked-list nodes are attached to each one of them (if non-empty). The linked list node has a pointer to the index or the node it's connected to and a weight value (if it has any).
+Here we have an array of the vertices A,B,C,D then linked-list nodes are attached to each one of them (if non-empty). The linked-list node has a pointer to the index or the node it's connected to and a weight value (if it has any).
 
 **Example 1:** We're using the same data from example 1 above (adjacency matrix).
+
+Edges: A-B, A-C, A-D, B-C.
 ```terminal
 A [0]->[1]->[2]->[3]->null
 B [1]->[0]->[2]->null
@@ -50,6 +52,8 @@ D [3]->[0]
 ```
 
 **Example 2:** We're using the same data from example 2 above (adjacency matrix).
+
+Edges: A-(3)->B, A-(2)->C, D-(4)->A, C-(1)->B.
 ```terminal
 A [0]->[1],3->[2],2->null
 B [1]->null
