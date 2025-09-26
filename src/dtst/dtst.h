@@ -5,15 +5,8 @@
 #include <stdlib.h>
 
 /**************************************************
- * - Linked Lists
- * -- Singly linked list / Linked list
- * -- Doubly linked list
- * -- Circular list
+ * - Singly linked list / Linked list
  **************************************************/
-
-/*-------------------------------------------------
- * Singly linked list / Linked list
- *-------------------------------------------------*/
 
 typedef struct slist_node {
     void              *data;
@@ -32,9 +25,9 @@ bool slist_head_ins(slist_t *list, void *data);
 bool slist_tail_rem(slist_t *list, void **data);
 void slist_rem(slist_t *list);
 
-/*-------------------------------------------------
- * Doubly linked list
- *-------------------------------------------------*/
+/**************************************************
+ * - Doubly linked list
+ **************************************************/
 
 typedef struct dlist_node {
     void              *data;
@@ -54,9 +47,9 @@ bool dlist_head_ins(dlist_t *list, void *data);
 bool dlist_tail_rem(dlist_t *list, void **data);
 void dlist_rem(dlist_t *list);
 
-/*-------------------------------------------------
- * Trie
- *-------------------------------------------------*/
+/**************************************************
+ * - Trie
+ **************************************************/
 
 #define TRIE_SIZE 26
 
@@ -69,5 +62,21 @@ trie_t *trie_node_new(void);
 void    trie_ins(trie_t *root, const char *word);
 bool    trie_find(trie_t *root, const char *word);
 void    trie_free(trie_t *root);
+
+/**************************************************
+ * - Graph
+ **************************************************/
+
+#define GRAPH_SIZE 4
+
+typedef struct graph {
+    int  adj_matrix[GRAPH_SIZE][GRAPH_SIZE];
+    char vertex_data[GRAPH_SIZE];
+} graph_t;
+
+void graph_init(graph_t *g);
+void graph_add_edge(graph_t *g, int u, int v, int weight);
+void graph_set_vertex_data(graph_t *g, int vertex, char data);
+void graph_print(const graph_t *g);
 
 #endif
