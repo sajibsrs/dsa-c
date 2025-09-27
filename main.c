@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(void) {
-    printf("Data structures and algorithms in c\n");
+    printf("DSA in C (%li)\n", __STDC_VERSION__);
     printf("-----------------------------------\n");
 
     return 0;
