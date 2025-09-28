@@ -1,36 +1,43 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "dtst.h"
 
 trie_t *trie_node_new(void) {
     trie_t *node = malloc(sizeof(trie_t));
-    if (!node) exit(1);
+    if (node == NULL) exit(1);
 
-    node->is_end = false;
-    for (int i = 0; i < TRIE_SIZE; i++) node->child[i] = NULL;
+    node->is_end = 0;
+    for (int i = 0; i < TRIE_SIZE; i++) {
+        node->child[i] = NULL;
+    }
     return node;
 }
 
-void trie_ins(trie_t *node, char const *word) {
-    for (int i = 0; word[i]; i++) {
+void trie_ins(trie_t *node, const char *word) {
+    for (int i = 0; word[i] != '\0'; i++) {
         int idx = word[i] - 'a';
 
-        if (!node->child[idx]) node->child[idx] = trie_node_new();
+        if (node->child[idx] == NULL) {
+            node->child[idx] = trie_node_new();
+        }
         node = node->child[idx];
     }
-    node->is_end = true;
+    node->is_end = 1;
 }
 
-bool trie_find(trie_t *node, const char *word) {
-    for (int i = 0; word[i]; i++) {
+int trie_find(trie_t *node, const char *word) {
+    for (int i = 0; word[i] != '\0'; i++) {
         int idx = word[i] - 'a';
-        if (!node->child[idx]) return false;
+        if (node->child[idx] == NULL) {
+            return 0;
+        }
         node = node->child[idx];
     }
     return node->is_end;
 }
 
 void trie_free(trie_t *node) {
-    if (!node) return;
+    if (node == NULL) return;
     for (int i = 0; i < TRIE_SIZE; i++) {
         trie_free(node->child[i]);
     }

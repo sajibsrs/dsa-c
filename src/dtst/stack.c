@@ -2,20 +2,20 @@
 #include <stdlib.h>
 #include "dtst.h"
 
-istack_t *stack_new(int capacity) {
+istack_t *stack_new(int size) {
     istack_t *new_stack = malloc(sizeof(istack_t));
-    new_stack->stack = malloc(capacity * sizeof(int));
+    new_stack->stack = malloc(size * sizeof(int));
     new_stack->top = -1;
-    new_stack->capacity = capacity;
+    new_stack->size = size;
     return new_stack;
 }
 
-void stack_push(istack_t *s, int element) {
-    if (s->top == s->capacity - 1) {
+void stack_push(istack_t *s, int elm) {
+    if (s->top == s->size - 1) {
         printf("Stack is full\n");
         return;
     }
-    s->stack[++s->top] = element;
+    s->stack[++s->top] = elm;
 }
 
 int stack_pop(istack_t *s) {

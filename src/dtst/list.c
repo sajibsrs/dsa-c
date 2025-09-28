@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "dtst.h"
 
 /**************************************************
@@ -10,23 +11,23 @@ void slist_init(slist_t *list, void (*destroy)(void *data)) {
     list->destroy = destroy;
 }
 
-bool slist_head_ins(slist_t *list, void *data) {
+int slist_head_ins(slist_t *list, void *data) {
     slist_node_t *new = malloc(sizeof(slist_node_t));
-    if (!new) return false;
+    if (new == NULL) return 0;
 
     new->data = data;
     new->next = list->head;
     list->head = new;
 
-    if (!list->tail) list->tail = new;
+    if (list->tail == NULL) list->tail = new;
     list->size++;
-    return true;
+    return 1;
 }
 
-bool slist_tail_rem(slist_t *list, void **data) {
-    if (!list->head) return false;
+int slist_tail_rem(slist_t *list, void **data) {
+    if (list->head == NULL) return 0;
 
-    if (data) *data = list->tail->data;
+    if (data != NULL) *data = list->tail->data;
 
     if (list->head == list->tail) {
         free(list->tail);
@@ -40,15 +41,15 @@ bool slist_tail_rem(slist_t *list, void **data) {
         list->tail = curr;
     }
     list->size--;
-    return true;
+    return 1;
 }
 
 void slist_rem(slist_t *list) {
     slist_node_t *curr = list->head;
 
-    while (curr) {
+    while (curr != NULL) {
         slist_node_t *next = curr->next;
-        if (list->destroy) list->destroy(curr->data);
+        if (list->destroy != NULL) list->destroy(curr->data);
         free(curr);
         curr = next;
     }
@@ -66,27 +67,27 @@ void dlist_init(dlist_t *list, void (*destroy)(void *data)) {
     list->destroy = destroy;
 }
 
-bool dlist_head_ins(dlist_t *list, void *data) {
+int dlist_head_ins(dlist_t *list, void *data) {
     dlist_node_t *new = malloc(sizeof(dlist_node_t));
-    if (!new) return false;
+    if (new == NULL) return 0;
 
     new->data = data;
     new->prev = NULL;
     new->next = list->head;
 
-    if (list->head) list->head->prev = new;
+    if (list->head != NULL) list->head->prev = new;
     list->head = new;
 
-    if (!list->tail) list->tail = new;
+    if (list->tail == NULL) list->tail = new;
     list->size++;
-    return true;
+    return 1;
 }
 
-bool dlist_tail_rem(dlist_t *list, void **data) {
-    if (!list->tail) return false;
+int dlist_tail_rem(dlist_t *list, void **data) {
+    if (list->tail == NULL) return 0;
 
     dlist_node_t *old = list->tail;
-    if (data) *data = old->data;
+    if (data != NULL) *data = old->data;
 
     if (list->head == list->tail) {
         list->head = list->tail = NULL;
@@ -96,15 +97,15 @@ bool dlist_tail_rem(dlist_t *list, void **data) {
     }
     free(old);
     list->size--;
-    return true;
+    return 1;
 }
 
 void dlist_rem(dlist_t *list) {
     dlist_node_t *curr = list->head;
 
-    while (curr) {
+    while (curr != NULL) {
         dlist_node_t *next = curr->next;
-        if (list->destroy) list->destroy(curr->data);
+        if (list->destroy != NULL) list->destroy(curr->data);
         free(curr);
         curr = next;
     }
