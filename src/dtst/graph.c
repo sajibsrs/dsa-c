@@ -1,83 +1,153 @@
 #include <stdio.h>
 #include "dtst.h"
+#include "../helper.h"
 
-void graph_init(graph_t *g) {
-    for (int i = 0; i < GRAPH_SIZE; i++) {
-        for (int j = 0; j < GRAPH_SIZE; j++) {
-            g->adj_matrix[i][j] = 0;
-        }
-        g->vertex_data[i] = '\0';
+/**************************************************
+ * - Adjacency Matrix (Array)
+ **************************************************/
+
+agr_t *agr_new(int size) {
+    agr_t *g = _malloc(sizeof(agr_t));
+    g->size = size;
+    g->adjmat = _malloc(size * sizeof(int *));
+
+    for (int i = 0; i < size; i++) {
+        g->adjmat[i] = _calloc(size, sizeof(int));
+    }
+    g->vdata = _malloc(size * sizeof(char));
+    return g;
+}
+
+void agr_edge_new(agr_t *g, int u, int v, int weight) {
+    if (u >= 0 && u < g->size && v >= 0 && v < g->size) {
+        g->adjmat[u][v] = weight;
     }
 }
 
-void graph_add_edge(graph_t *g, int u, int v, int weight) {
-    if (u >= 0 && u < GRAPH_SIZE && v >= 0 && v < GRAPH_SIZE) {
-        g->adj_matrix[u][v] = weight;
+void agr_vdata_set(agr_t *g, int vertex, char data) {
+    if (vertex >= 0 && vertex < g->size) {
+        g->vdata[vertex] = data;
     }
 }
 
-void graph_set_vertex_data(graph_t *g, int vertex, char data) {
-    if (vertex >= 0 && vertex < GRAPH_SIZE) {
-        g->vertex_data[vertex] = data;
-    }
-}
-
-static void dfs_util(const graph_t *g, int v, int visited[]) {
+static void dfs_util(const agr_t *g, int v, int *visited) {
     visited[v] = 1;
-    printf("%c ", g->vertex_data[v]);
+    printf("%c ", g->vdata[v]);
 
-    for (int i = 0; i < GRAPH_SIZE; i++) {
-        if (g->vertex_data[i] != '\0' && g->adj_matrix[v][i] > 0 && visited[i] == 0) {
+    for (int i = 0; i < g->size; i++) {
+        if (g->adjmat[v][i] > 0 && !visited[i]) {
             dfs_util(g, i, visited);
         }
     }
 }
 
-void graph_dfs(const graph_t *g, char start_vertex) {
-    int visited[GRAPH_SIZE] = {0};
+void agr_dfs(const agr_t *g, char start_vdata) {
+    int *visited = _calloc(g->size, sizeof(int));
 
-    for (int i = 0; i < GRAPH_SIZE; i++) {
-        if (g->vertex_data[i] == start_vertex) {
-            printf("DFS traversal from %c: ", start_vertex);
+    for (int i = 0; i < g->size; i++) {
+        if (g->vdata[i] == start_vdata) {
+            printf("DFS traversal from %c: ", start_vdata);
             dfs_util(g, i, visited);
             printf("\n");
             break;
         }
     }
-    printf("Vertex %c not found\n", start_vertex);
+    __free(visited);
 }
 
-void graph_print(const graph_t *g) {
-    int actual_size = 0;
-    for (int i = 0; i < GRAPH_SIZE; i++) {
-        if (g->vertex_data[i] != '\0') {
-            actual_size = i + 1;
+void agr_bfs(const agr_t *g, char start_vertex) {
+    int *visited = _calloc(g->size, sizeof(int));
+    int *queue = _malloc(g->size * sizeof(int));
+    int front = 0, rear = 0;
+
+    for (int i = 0; i < g->size; i++) {
+        if (g->vdata[i] == start_vertex) {
+            queue[rear++] = i; // enqueue
+            visited[i] = 1;
+
+            while (front < rear) {
+                int curr_vtx = queue[front++]; // dequeue
+                printf("%c ", g->vdata[curr_vtx]);
+
+                for (int j = 0; j < g->size; j++) {
+                    if (g->adjmat[curr_vtx][j] > 0 && !visited[j]) {
+                        queue[rear++] = j; // enqueue
+                        visited[j] = 1;
+                    }
+                }
+            }
+            break;
         }
     }
+    __free(queue);
+    __free(visited);
+}
 
-    printf("Adjacency Matrix (weights):\n");
-    printf("   ");
-    for (int i = 0; i < actual_size; i++) {
-        printf("%c ", g->vertex_data[i]);
-    }
-    printf("\n");
+static int cycle_util(const agr_t *g, int u, int *state) {
+    if (state[u] == 1) return 1; // cycle
+    if (state[u] == 2) return 0; // finished, no recheck
 
-    for (int i = 0; i < actual_size; i++) {
-        printf("%c ", g->vertex_data[i]);
-        for (int j = 0; j < actual_size; j++) {
-            printf("%d ", g->adj_matrix[i][j]);
+    state[u] = 1; // processing
+
+    for (int v = 0; v < g->size; v++) {
+        if (g->adjmat[u][v] > 0) {
+            if (cycle_util(g, v, state)) return 1;
         }
-        printf("\n");
     }
+    state[u] = 2; // child check finished
+    return 0;
+}
 
-    printf("\nEdges:\n");
-    for (int i = 0; i < actual_size; i++) {
-        for (int j = 0; j < actual_size; j++) {
-            if (g->adj_matrix[i][j] > 0) {
-                printf(
-                    "%c -(%d)-> %c\n", g->vertex_data[i], g->adj_matrix[i][j], g->vertex_data[j]
-                );
+int agr_has_cycle(const agr_t *g) {
+    int *state = _calloc(g->size, sizeof(int));
+
+    for (int i = 0; i < g->size; i++) {
+        if (state[i] == 0) {
+            if (cycle_util(g, i, state)) {
+                __free(state);
+                return 1; // cycle
             }
         }
     }
+    __free(state);
+    return 0;
 }
+
+void agr_free(agr_t *g) {
+    if (!g) return;
+
+    for (int i = 0; i < g->size; i++) __free(g->adjmat[i]);
+    __free(g->adjmat);
+    __free(g->vdata);
+    __free(g);
+}
+
+void agr_print(const agr_t *g) {
+    printf("Adjacency Matrix:\n");
+
+    for (int i = 0; i < g->size; i++) {
+        for (int j = 0; j < g->size; j++) {
+            printf("%d ", g->adjmat[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\nVertex Data:\n");
+
+    for (int i = 0; i < g->size; i++) {
+        printf("Vertex %d: %c\n", i, g->vdata[i]);
+    }
+}
+
+/**************************************************
+ * - Adjacency List (Sparse Graph)
+ **************************************************/
+
+sgr_t *sgr_new(int size) {
+    sgr_t *g = _malloc(sizeof(sgr_t));
+    g->size = size;
+    g->alist = _calloc(size, sizeof(alnode_t *));
+    g->vdata = _malloc(size * sizeof(char));
+}
+
+void sgr_edge_new(sgr_t *g, int u, int v, int weight);
+void sgr_free(sgr_t *g);
