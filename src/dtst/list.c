@@ -12,7 +12,7 @@ void slist_init(slist_t *list, void (*destroy)(void *data)) {
 }
 
 int slist_head_ins(slist_t *list, void *data) {
-    slist_node_t *new = malloc(sizeof(slist_node_t));
+    slnode_t *new = malloc(sizeof(slnode_t));
     if (new == NULL) return 0;
 
     new->data = data;
@@ -33,7 +33,7 @@ int slist_tail_rem(slist_t *list, void **data) {
         free(list->tail);
         list->head = list->tail = NULL;
     } else {
-        slist_node_t *curr = list->head;
+        slnode_t *curr = list->head;
         while (curr->next != list->tail) curr = curr->next;
 
         free(list->tail);
@@ -45,10 +45,10 @@ int slist_tail_rem(slist_t *list, void **data) {
 }
 
 void slist_rem(slist_t *list) {
-    slist_node_t *curr = list->head;
+    slnode_t *curr = list->head;
 
     while (curr != NULL) {
-        slist_node_t *next = curr->next;
+        slnode_t *next = curr->next;
         if (list->destroy != NULL) list->destroy(curr->data);
         free(curr);
         curr = next;
@@ -68,7 +68,7 @@ void dlist_init(dlist_t *list, void (*destroy)(void *data)) {
 }
 
 int dlist_head_ins(dlist_t *list, void *data) {
-    dlist_node_t *new = malloc(sizeof(dlist_node_t));
+    dlnode_t *new = malloc(sizeof(dlnode_t));
     if (new == NULL) return 0;
 
     new->data = data;
@@ -86,7 +86,7 @@ int dlist_head_ins(dlist_t *list, void *data) {
 int dlist_tail_rem(dlist_t *list, void **data) {
     if (list->tail == NULL) return 0;
 
-    dlist_node_t *old = list->tail;
+    dlnode_t *old = list->tail;
     if (data != NULL) *data = old->data;
 
     if (list->head == list->tail) {
@@ -101,10 +101,10 @@ int dlist_tail_rem(dlist_t *list, void **data) {
 }
 
 void dlist_rem(dlist_t *list) {
-    dlist_node_t *curr = list->head;
+    dlnode_t *curr = list->head;
 
     while (curr != NULL) {
-        dlist_node_t *next = curr->next;
+        dlnode_t *next = curr->next;
         if (list->destroy != NULL) list->destroy(curr->data);
         free(curr);
         curr = next;
