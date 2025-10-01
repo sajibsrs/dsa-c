@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include "helper.h"
 
-void *_malloc(size_t _size) {
+void *xmalloc(size_t _size) {
     void *ptr = malloc(_size);
     if (!ptr) exit(11);
     return ptr;
 }
 
-void *_calloc(size_t _count, size_t _size) {
+void *xcalloc(size_t _count, size_t _size) {
     void *ptr = calloc(_count, _size);
     if (!ptr) exit(11);
     return ptr;
 }
 
-void _free(void **_ptr) {
+void _xfree(void **_ptr) {
     if (_ptr && *_ptr) {
         free(*_ptr);
         *_ptr = NULL;

@@ -7,14 +7,14 @@
  **************************************************/
 
 agr_t *agr_new(int size) {
-    agr_t *g = _malloc(sizeof(agr_t));
+    agr_t *g = xmalloc(sizeof(agr_t));
     g->size = size;
-    g->adjmat = _malloc(size * sizeof(int *));
+    g->adjmat = xmalloc(size * sizeof(int *));
 
     for (int i = 0; i < size; i++) {
-        g->adjmat[i] = _calloc(size, sizeof(int));
+        g->adjmat[i] = xcalloc(size, sizeof(int));
     }
-    g->vdata = _malloc(size * sizeof(char));
+    g->vdata = xmalloc(size * sizeof(char));
     return g;
 }
 
@@ -42,7 +42,7 @@ static void dfs_util(const agr_t *g, int v, int *visited) {
 }
 
 void agr_dfs(const agr_t *g, char start_vdata) {
-    int *visited = _calloc(g->size, sizeof(int));
+    int *visited = xcalloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
         if (g->vdata[i] == start_vdata) {
@@ -52,12 +52,12 @@ void agr_dfs(const agr_t *g, char start_vdata) {
             break;
         }
     }
-    __free(visited);
+    xfree(visited);
 }
 
 void agr_bfs(const agr_t *g, char start_vertex) {
-    int *visited = _calloc(g->size, sizeof(int));
-    int *queue = _malloc(g->size * sizeof(int));
+    int *visited = xcalloc(g->size, sizeof(int));
+    int *queue = xmalloc(g->size * sizeof(int));
     int front = 0, rear = 0;
 
     for (int i = 0; i < g->size; i++) {
@@ -79,8 +79,8 @@ void agr_bfs(const agr_t *g, char start_vertex) {
             break;
         }
     }
-    __free(queue);
-    __free(visited);
+    xfree(queue);
+    xfree(visited);
 }
 
 static int cycle_util(const agr_t *g, int u, int *state) {
@@ -99,27 +99,27 @@ static int cycle_util(const agr_t *g, int u, int *state) {
 }
 
 int agr_has_cycle(const agr_t *g) {
-    int *state = _calloc(g->size, sizeof(int));
+    int *state = xcalloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
         if (state[i] == 0) {
             if (cycle_util(g, i, state)) {
-                __free(state);
+                xfree(state);
                 return 1; // cycle
             }
         }
     }
-    __free(state);
+    xfree(state);
     return 0;
 }
 
 void agr_free(agr_t *g) {
     if (!g) return;
 
-    for (int i = 0; i < g->size; i++) __free(g->adjmat[i]);
-    __free(g->adjmat);
-    __free(g->vdata);
-    __free(g);
+    for (int i = 0; i < g->size; i++) xfree(g->adjmat[i]);
+    xfree(g->adjmat);
+    xfree(g->vdata);
+    xfree(g);
 }
 
 void agr_print(const agr_t *g) {
@@ -143,10 +143,10 @@ void agr_print(const agr_t *g) {
  **************************************************/
 
 sgr_t *sgr_new(int size) {
-    sgr_t *g = _malloc(sizeof(sgr_t));
+    sgr_t *g = xmalloc(sizeof(sgr_t));
     g->size = size;
-    g->alist = _calloc(size, sizeof(alnode_t *));
-    g->vdata = _malloc(size * sizeof(char));
+    g->alist = xcalloc(size, sizeof(alnode_t *));
+    g->vdata = xmalloc(size * sizeof(char));
 }
 
 void sgr_edge_new(sgr_t *g, int u, int v, int weight);

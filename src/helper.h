@@ -3,11 +3,11 @@
 
 #include <stdlib.h>
 
-#define __free(_ptr) _free((void **)&(_ptr))
+#define xfree(ptr) _xfree((void **)&(ptr))
 
-void *_malloc(size_t _size);
-void *_calloc(size_t _count, size_t _size);
-void _free(void **_ptr);
+void *xmalloc(size_t _size);
+void *xcalloc(size_t _count, size_t _size);
+void _xfree(void **_ptr);
 
 /**
  * @brief Prints bits in a byte.
