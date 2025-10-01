@@ -5,10 +5,10 @@ BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLoopsOnASingleLine: true
-AlignConsecutiveDeclarations:
-    Enabled: true
-    AlignFunctionDeclarations: true
-    AlignFunctionPointers: true
+# AlignConsecutiveDeclarations:
+#     Enabled: true
+#     AlignFunctionDeclarations: true
+#     AlignFunctionPointers: true
 # AlignConsecutiveAssignments: Consecutive
 AlignArrayOfStructures: Left
 AlignAfterOpenBracket: BlockIndent
