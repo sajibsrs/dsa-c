@@ -3,7 +3,7 @@
 #include "../src/dtst/dtst.h"
 
 int main(void) {
-    iqueue_t q = {0};
+    que_t q = {0};
 
     // Basic operations
     assert(queue_is_empty(&q) && queue_size(&q) == 0);

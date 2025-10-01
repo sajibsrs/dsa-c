@@ -59,7 +59,7 @@ int main(void) {
     printf("✓ Empty list creation works\n");
 
     // Test 6: Remove from empty list (should fail)
-    assert(dlist_tail_rem(&list, &data) == false);
+    assert(dlist_tail_rem(&list, &data) == 0);
     printf("✓ Empty list removal fails correctly\n");
 
     // Test 7: Insert after empty and test forward/backward traversal
@@ -79,7 +79,7 @@ int main(void) {
     printf("✓ Doubly links work correctly\n");
 
     // Test 8: Forward traversal
-    dlist_node_t *node = list.head;
+    dlnode_t *node = list.head;
     assert(*(int *)node->data == 200);
     node = node->next;
     assert(*(int *)node->data == 100);

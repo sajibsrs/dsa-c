@@ -1,61 +1,83 @@
 #include <stdio.h>
-#include "../src/dtst/dtst.h"
-
-void print_adjacency_matrix(int matrix[4][4], int size) {
-    printf("\nAdjacency Matrix:\n");
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            printf("%d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void test_weighted_directed(void) {
-    printf("Weighted Directed Graph:\n");
-    graph_t g;
-    graph_init(&g);
-
-    // Set vertex data: A=0, B=1, C=2, D=3
-    graph_set_vertex_data(&g, 0, 'A');
-    graph_set_vertex_data(&g, 1, 'B');
-    graph_set_vertex_data(&g, 2, 'C');
-    graph_set_vertex_data(&g, 3, 'D');
-
-    // Add weighted edges as directed graph
-    graph_add_edge(&g, 0, 1, 3); // A -(3)-> B
-    graph_add_edge(&g, 0, 2, 2); // A -(2)-> C
-    graph_add_edge(&g, 3, 0, 4); // D -(4)-> A
-    graph_add_edge(&g, 2, 1, 1); // C -(1)-> B
-
-    graph_print(&g);
-}
-
-void test_array_matrix(void) {
-    printf("\nArray-Based Adjacency Matrix:\n");
-
-    int adj_matrix[4][4] = {
-        {0, 1, 1, 1}, // A
-        {1, 0, 1, 0}, // B
-        {1, 1, 0, 0}, // C
-        {1, 0, 0, 0}  // D
-    };
-
-    print_adjacency_matrix(adj_matrix, 4);
-
-    printf("\nEdges:\n");
-    char vertices[] = {'A', 'B', 'C', 'D'};
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (adj_matrix[i][j] == 1) {
-                printf("%c -> %c\n", vertices[i], vertices[j]);
-            }
-        }
-    }
-}
+#include <assert.h>
+#include "../src/dtst/dtst.h" // Assuming graph_has_cycle is in this header
 
 int main(void) {
-    test_weighted_directed();
-    test_array_matrix();
+    int size = 6;
+    agr_t *g_acyclic = agr_new(size);
+    agr_t *g_cyclic = agr_new(size);
+
+    // Set vertex data for Acyclic Graph
+    agr_vdata_set(g_acyclic, 0, 'A');
+    agr_vdata_set(g_acyclic, 1, 'B');
+    agr_vdata_set(g_acyclic, 2, 'C');
+    agr_vdata_set(g_acyclic, 3, 'D');
+    agr_vdata_set(g_acyclic, 4, 'E');
+    agr_vdata_set(g_acyclic, 5, 'F');
+
+    // Add Acyclic Edges
+    agr_edge_new(g_acyclic, 0, 1, 2); // A -> B
+    agr_edge_new(g_acyclic, 0, 2, 5); // A -> C
+    agr_edge_new(g_acyclic, 1, 3, 3); // B -> D
+    agr_edge_new(g_acyclic, 1, 4, 6); // B -> E
+    agr_edge_new(g_acyclic, 2, 5, 4); // C -> F
+
+    printf("CYCLE DETECTION TESTS\n");
+    printf("----------------------------------\n");
+
+    // Test 1: ACYCLIC Graph (Expected: 0 / FALSE)
+    printf("1. ACYCLIC Graph Test:\n");
+    printf("Graph Structure:\n");
+    agr_print(g_acyclic);
+
+    int is_cyclic_1 = agr_has_cycle(g_acyclic);
+    assert(is_cyclic_1 == 0); // Assert graph is not cyclic
+    printf("Result: Graph is %s (Expected: Not Cyclic)\n", is_cyclic_1 ? "Cyclic" : "Not Cyclic");
+    printf("✓ ACYCLIC Test Passed\n");
+
+    printf("\n2. CYCLIC Graph Test:\n");
+
+    // Set vertex data for Cyclic Graph (Same vertices)
+    agr_vdata_set(g_cyclic, 0, 'W');
+    agr_vdata_set(g_cyclic, 1, 'X');
+    agr_vdata_set(g_cyclic, 2, 'Y');
+    agr_vdata_set(g_cyclic, 3, 'Z');
+
+    // Add edges forming a cycle: W -> X -> Y -> W
+    agr_edge_new(g_cyclic, 0, 1, 1); // W -> X
+    agr_edge_new(g_cyclic, 1, 2, 1); // X -> Y
+    agr_edge_new(g_cyclic, 2, 0, 1); // Y -> W (Cycle Closer)
+
+    // Add a disconnected component (to test full traversal): Y -> Z
+    agr_edge_new(g_cyclic, 2, 3, 1); // Y -> Z
+
+    printf("Graph Structure (W->X->Y->W cycle):\n");
+    agr_print(g_cyclic);
+
+    // Test 2: CYCLIC Graph (Expected: 1 / TRUE)
+    int is_cyclic_2 = agr_has_cycle(g_cyclic);
+    assert(is_cyclic_2 == 1); // Assert graph is cyclic
+    printf("Result: Graph is %s (Expected: Cyclic)\n", is_cyclic_2 ? "Cyclic" : "Not Cyclic");
+    printf("✓ CYCLIC Test Passed\n");
+
+    // 3. Traversal Tests (Can use g_acyclic)
+    printf("TRAVERSAL TESTS\n");
+    printf("----------------------------------\n");
+
+    printf("DFS Test:\n");
+    agr_dfs(g_acyclic, 'A');
+    printf("✓ DFS traversal performed\n");
+
+    printf("BFS Test:\n");
+    printf("BFS traversal from A: ");
+    agr_bfs(g_acyclic, 'A');
+    printf("\n");
+    printf("✓ BFS traversal performed\n");
+
+    // 4. Cleanup
+    agr_free(g_acyclic);
+    agr_free(g_cyclic);
+    printf("🎉 All Graph tests passed successfully!\n");
+
     return 0;
 }
