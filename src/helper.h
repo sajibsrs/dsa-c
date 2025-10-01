@@ -7,7 +7,7 @@
 
 void *_malloc(size_t _size);
 void *_calloc(size_t _count, size_t _size);
-void  _free(void **_ptr);
+void _free(void **_ptr);
 
 /**
  * @brief Prints bits in a byte.
