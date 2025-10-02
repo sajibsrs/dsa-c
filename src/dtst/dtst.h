@@ -119,14 +119,14 @@ void agr_dfs(const agr_t *g, char start_vdata);
 void agr_bfs(const agr_t *g, char start_vdata);
 int agr_has_cycle(const agr_t *g);
 
+/** - Sparse Graph Implementation ================**/
+
 // Adjacency list node type
 typedef struct alnode {
     int vertex;
     int weight;
     struct alnode *next;
 } alnode_t;
-
-/** - Sparse Graph Implementation ================**/
 
 // Sparse graph type
 typedef struct {
@@ -137,6 +137,8 @@ typedef struct {
 
 sgr_t *sgr_new(int size);
 void sgr_edge_new(sgr_t *g, int u, int v, int weight);
+void sgr_vdata_set(sgr_t *g, int vertex, char data);
+void sgr_print(const sgr_t *g);
 void sgr_free(sgr_t *g);
 
 #endif

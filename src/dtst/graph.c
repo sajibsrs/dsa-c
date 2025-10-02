@@ -114,8 +114,6 @@ int agr_has_cycle(const agr_t *g) {
 }
 
 void agr_free(agr_t *g) {
-    if (!g) return;
-
     for (int i = 0; i < g->size; i++) xfree(g->adjmat[i]);
     xfree(g->adjmat);
     xfree(g->vdata);
@@ -147,7 +145,55 @@ sgr_t *sgr_new(int size) {
     g->size = size;
     g->alist = xcalloc(size, sizeof(alnode_t *));
     g->vdata = xmalloc(size * sizeof(char));
+
+    return g;
 }
 
-void sgr_edge_new(sgr_t *g, int u, int v, int weight);
-void sgr_free(sgr_t *g);
+void sgr_edge_new(sgr_t *g, int u, int v, int weight) {
+    if (u >= 0 && u < g->size && v >= 0 && v < g->size) {
+        alnode_t *new_node = xmalloc(sizeof(alnode_t));
+        new_node->vertex = v;
+        new_node->weight = weight;
+        new_node->next = g->alist[u];
+        g->alist[u] = new_node;
+    }
+}
+
+void sgr_vdata_set(sgr_t *g, int vertex, char data) {
+    if (vertex >= 0 && vertex < g->size) {
+        g->vdata[vertex] = data;
+    }
+}
+
+void sgr_print(const sgr_t *g) {
+    for (int i = 0; i < g->size; i++) {
+        printf("Vertex %d ('%c'): -> ", i, g->vdata[i]);
+        alnode_t *current = g->alist[i];
+
+        while (current != NULL) {
+            printf("v%d (w:%d)", current->vertex, current->weight);
+            current = current->next;
+
+            if (current != NULL) {
+                printf(" -> ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+void sgr_free(sgr_t *g) {
+    for (int i = 0; i < g->size; i++) {
+        alnode_t *current = g->alist[i];
+        alnode_t *temp;
+
+        while (current != NULL) {
+            temp = current;
+            current = current->next;
+            xfree(temp);
+        }
+    }
+    xfree(g->alist);
+    xfree(g->vdata);
+    xfree(g);
+}
