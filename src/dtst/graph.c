@@ -249,7 +249,7 @@ void sgr_free(sgr_t *g) {
         while (current != NULL) {
             temp = current;
             current = current->next;
-            __free(temp);
+            free(temp);
         }
     }
     __free(g->alist);
