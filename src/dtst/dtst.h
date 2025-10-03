@@ -100,7 +100,8 @@ void trie_free(trie_t *root);
  * - Graph
  **************************************************/
 
-/** - Array Implementation ======================**/
+/* - Array Implementation
+ * ---------------------------------------------- */
 
 // Array based graph type
 typedef struct {
@@ -119,11 +120,12 @@ void agr_dfs(const agr_t *g, char start_vdata);
 void agr_bfs(const agr_t *g, char start_vdata);
 int agr_has_cycle(const agr_t *g);
 
-/** - Sparse Graph Implementation ================**/
+/* - Sparse Graph Implementation
+ * ---------------------------------------------- */
 
 // Adjacency list node type
 typedef struct alnode {
-    int vertex;
+    int vindex;
     int weight;
     struct alnode *next;
 } alnode_t;
@@ -137,8 +139,10 @@ typedef struct {
 
 sgr_t *sgr_new(int size);
 void sgr_edge_new(sgr_t *g, int u, int v, int weight);
-void sgr_vdata_set(sgr_t *g, int vertex, char data);
+void sgr_vdata_set(sgr_t *g, int vindex, char data);
 void sgr_print(const sgr_t *g);
 void sgr_free(sgr_t *g);
+
+void sgr_dfs(const sgr_t *g, char start_vdata);
 
 #endif

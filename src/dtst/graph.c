@@ -30,13 +30,13 @@ void agr_vdata_set(agr_t *g, int vertex, char data) {
     }
 }
 
-static void dfs_util(const agr_t *g, int v, int *visited) {
+static void agr_dfs_util(const agr_t *g, int v, int *visited) {
     visited[v] = 1;
     printf("%c ", g->vdata[v]);
 
     for (int i = 0; i < g->size; i++) {
         if (g->adjmat[v][i] > 0 && !visited[i]) {
-            dfs_util(g, i, visited);
+            agr_dfs_util(g, i, visited);
         }
     }
 }
@@ -47,7 +47,7 @@ void agr_dfs(const agr_t *g, char start_vdata) {
     for (int i = 0; i < g->size; i++) {
         if (g->vdata[i] == start_vdata) {
             printf("DFS traversal from %c: ", start_vdata);
-            dfs_util(g, i, visited);
+            agr_dfs_util(g, i, visited);
             printf("\n");
             break;
         }
@@ -152,7 +152,7 @@ sgr_t *sgr_new(int size) {
 void sgr_edge_new(sgr_t *g, int u, int v, int weight) {
     if (u >= 0 && u < g->size && v >= 0 && v < g->size) {
         alnode_t *new_node = xmalloc(sizeof(alnode_t));
-        new_node->vertex = v;
+        new_node->vindex = v;
         new_node->weight = weight;
         new_node->next = g->alist[u];
         g->alist[u] = new_node;
@@ -165,13 +165,41 @@ void sgr_vdata_set(sgr_t *g, int vertex, char data) {
     }
 }
 
+static void sgr_dfs_util(const sgr_t *g, int u, int *visited) {
+    visited[u] = 1;
+    printf("%c ", g->vdata[u]);
+
+    alnode_t *current = g->alist[u];
+    while (current != NULL) {
+        int v = current->vindex;
+        if (!visited[v]) {
+            sgr_dfs_util(g, v, visited);
+        }
+        current = current->next;
+    }
+}
+
+void sgr_dfs(const sgr_t *g, char start_vdata) {
+    int *visited = xcalloc(g->size, sizeof(int));
+
+    for (int i = 0; i < g->size; i++) {
+        if (g->vdata[i] == start_vdata) {
+            printf("DFS traversal from %c: ", start_vdata);
+            sgr_dfs_util(g, i, visited);
+            printf("\n");
+            break;
+        }
+    }
+    xfree(visited);
+}
+
 void sgr_print(const sgr_t *g) {
     for (int i = 0; i < g->size; i++) {
         printf("Vertex %d ('%c'): -> ", i, g->vdata[i]);
-        alnode_t *current = g->alist[i];
 
+        alnode_t *current = g->alist[i];
         while (current != NULL) {
-            printf("v%d (w:%d)", current->vertex, current->weight);
+            printf("v%d (w:%d)", current->vindex, current->weight);
             current = current->next;
 
             if (current != NULL) {
