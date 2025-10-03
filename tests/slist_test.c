@@ -51,7 +51,7 @@ int main(void) {
     printf("✓ Empty list creation works\n");
 
     // Test 5: Remove from empty list (should fail)
-    assert(slist_tail_rem(&list, &data) == false);
+    assert(slist_tail_rem(&list, &data) == 0);
     printf("✓ Empty list removal fails correctly\n");
 
     // Test 6: Insert after empty
