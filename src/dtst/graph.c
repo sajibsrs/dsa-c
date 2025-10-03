@@ -83,7 +83,7 @@ void agr_bfs(const agr_t *g, char start_vertex) {
     __free(visited);
 }
 
-static int cycle_util(const agr_t *g, int u, int *state) {
+static int agr_cycle_util(const agr_t *g, int u, int *state) {
     if (state[u] == 1) return 1; // cycle
     if (state[u] == 2) return 0; // finished, no recheck
 
@@ -91,7 +91,7 @@ static int cycle_util(const agr_t *g, int u, int *state) {
 
     for (int v = 0; v < g->size; v++) {
         if (g->adjmat[u][v] > 0) {
-            if (cycle_util(g, v, state)) return 1;
+            if (agr_cycle_util(g, v, state)) return 1;
         }
     }
     state[u] = 2; // child check finished
@@ -103,7 +103,7 @@ int agr_has_cycle(const agr_t *g) {
 
     for (int i = 0; i < g->size; i++) {
         if (state[i] == 0) {
-            if (cycle_util(g, i, state)) {
+            if (agr_cycle_util(g, i, state)) {
                 __free(state);
                 return 1; // cycle
             }
