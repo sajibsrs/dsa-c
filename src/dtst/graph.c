@@ -7,14 +7,14 @@
  **************************************************/
 
 agr_t *agr_new(int size) {
-    agr_t *g = xmalloc(sizeof(agr_t));
+    agr_t *g = __malloc(sizeof(agr_t));
     g->size = size;
-    g->adjmat = xmalloc(size * sizeof(int *));
+    g->adjmat = __malloc(size * sizeof(int *));
 
     for (int i = 0; i < size; i++) {
-        g->adjmat[i] = xcalloc(size, sizeof(int));
+        g->adjmat[i] = __calloc(size, sizeof(int));
     }
-    g->vdata = xmalloc(size * sizeof(char));
+    g->vdata = __malloc(size * sizeof(char));
     return g;
 }
 
@@ -42,7 +42,7 @@ static void agr_dfs_util(const agr_t *g, int v, int *visited) {
 }
 
 void agr_dfs(const agr_t *g, char start_vdata) {
-    int *visited = xcalloc(g->size, sizeof(int));
+    int *visited = __calloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
         if (g->vdata[i] == start_vdata) {
@@ -52,12 +52,12 @@ void agr_dfs(const agr_t *g, char start_vdata) {
             break;
         }
     }
-    xfree(visited);
+    __free(visited);
 }
 
 void agr_bfs(const agr_t *g, char start_vertex) {
-    int *visited = xcalloc(g->size, sizeof(int));
-    int *queue = xmalloc(g->size * sizeof(int));
+    int *visited = __calloc(g->size, sizeof(int));
+    int *queue = __malloc(g->size * sizeof(int));
     int front = 0, rear = 0;
 
     for (int i = 0; i < g->size; i++) {
@@ -79,8 +79,8 @@ void agr_bfs(const agr_t *g, char start_vertex) {
             break;
         }
     }
-    xfree(queue);
-    xfree(visited);
+    __free(queue);
+    __free(visited);
 }
 
 static int cycle_util(const agr_t *g, int u, int *state) {
@@ -99,25 +99,25 @@ static int cycle_util(const agr_t *g, int u, int *state) {
 }
 
 int agr_has_cycle(const agr_t *g) {
-    int *state = xcalloc(g->size, sizeof(int));
+    int *state = __calloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
         if (state[i] == 0) {
             if (cycle_util(g, i, state)) {
-                xfree(state);
+                __free(state);
                 return 1; // cycle
             }
         }
     }
-    xfree(state);
+    __free(state);
     return 0;
 }
 
 void agr_free(agr_t *g) {
-    for (int i = 0; i < g->size; i++) xfree(g->adjmat[i]);
-    xfree(g->adjmat);
-    xfree(g->vdata);
-    xfree(g);
+    for (int i = 0; i < g->size; i++) __free(g->adjmat[i]);
+    __free(g->adjmat);
+    __free(g->vdata);
+    __free(g);
 }
 
 void agr_print(const agr_t *g) {
@@ -141,17 +141,17 @@ void agr_print(const agr_t *g) {
  **************************************************/
 
 sgr_t *sgr_new(int size) {
-    sgr_t *g = xmalloc(sizeof(sgr_t));
+    sgr_t *g = __malloc(sizeof(sgr_t));
     g->size = size;
-    g->alist = xcalloc(size, sizeof(alnode_t *));
-    g->vdata = xmalloc(size * sizeof(char));
+    g->alist = __calloc(size, sizeof(alnode_t *));
+    g->vdata = __malloc(size * sizeof(char));
 
     return g;
 }
 
 void sgr_edge_new(sgr_t *g, int u, int v, int weight) {
     if (u >= 0 && u < g->size && v >= 0 && v < g->size) {
-        alnode_t *new_node = xmalloc(sizeof(alnode_t));
+        alnode_t *new_node = __malloc(sizeof(alnode_t));
         new_node->vindex = v;
         new_node->weight = weight;
         new_node->next = g->alist[u];
@@ -180,7 +180,7 @@ static void sgr_dfs_util(const sgr_t *g, int u, int *visited) {
 }
 
 void sgr_dfs(const sgr_t *g, char start_vdata) {
-    int *visited = xcalloc(g->size, sizeof(int));
+    int *visited = __calloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
         if (g->vdata[i] == start_vdata) {
@@ -190,7 +190,7 @@ void sgr_dfs(const sgr_t *g, char start_vdata) {
             break;
         }
     }
-    xfree(visited);
+    __free(visited);
 }
 
 void sgr_print(const sgr_t *g) {
@@ -218,10 +218,10 @@ void sgr_free(sgr_t *g) {
         while (current != NULL) {
             temp = current;
             current = current->next;
-            xfree(temp);
+            __free(temp);
         }
     }
-    xfree(g->alist);
-    xfree(g->vdata);
-    xfree(g);
+    __free(g->alist);
+    __free(g->vdata);
+    __free(g);
 }
