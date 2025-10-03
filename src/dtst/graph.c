@@ -66,11 +66,11 @@ void agr_bfs(const agr_t *g, char start_vertex) {
             visited[i] = 1;
 
             while (front < rear) {
-                int curr_vtx = queue[front++]; // dequeue
-                printf("%c ", g->vdata[curr_vtx]);
+                int curr_qidx = queue[front++]; // dequeue
+                printf("%c ", g->vdata[curr_qidx]);
 
                 for (int j = 0; j < g->size; j++) {
-                    if (g->adjmat[curr_vtx][j] > 0 && !visited[j]) {
+                    if (g->adjmat[curr_qidx][j] > 0 && !visited[j]) {
                         queue[rear++] = j; // enqueue
                         visited[j] = 1;
                     }
@@ -179,17 +179,48 @@ static void sgr_dfs_util(const sgr_t *g, int u, int *visited) {
     }
 }
 
-void sgr_dfs(const sgr_t *g, char start_vdata) {
+void sgr_dfs(const sgr_t *g, char start_vtx) {
     int *visited = __calloc(g->size, sizeof(int));
 
     for (int i = 0; i < g->size; i++) {
-        if (g->vdata[i] == start_vdata) {
-            printf("DFS traversal from %c: ", start_vdata);
+        if (g->vdata[i] == start_vtx) {
+            printf("DFS traversal from %c: ", start_vtx);
             sgr_dfs_util(g, i, visited);
             printf("\n");
             break;
         }
     }
+    __free(visited);
+}
+
+void sgr_bfs(const sgr_t *g, char start_vtx) {
+    int *visited = __calloc(g->size, sizeof(int));
+    int *queue = __malloc(g->size * sizeof(int));
+    int front = 0, rear = 0;
+
+    for (int i = 0; i < g->size; i++) {
+        if (g->vdata[i] == start_vtx) {
+            queue[rear++] = i; // enqueue
+            visited[i] = 1;
+
+            while (front < rear) {
+                int curr_qidx = queue[front++]; // dequeue
+                printf("%c ", g->vdata[curr_qidx]);
+
+                alnode_t *current = g->alist[curr_qidx];
+                while (current != NULL) {
+                    int v = current->vindex;
+                    if (!visited[v]) {
+                        queue[rear++] = v; // enqueue
+                        visited[v] = 1;
+                    }
+                    current = current->next;
+                }
+            }
+            break;
+        }
+    }
+    __free(queue);
     __free(visited);
 }
 

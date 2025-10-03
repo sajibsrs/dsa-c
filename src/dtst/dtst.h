@@ -143,6 +143,7 @@ void sgr_vdata_set(sgr_t *g, int vindex, char data);
 void sgr_print(const sgr_t *g);
 void sgr_free(sgr_t *g);
 
-void sgr_dfs(const sgr_t *g, char start_vdata);
+void sgr_dfs(const sgr_t *g, char start_vtx);
+void sgr_bfs(const sgr_t *g, char start_vtx);
 
 #endif
