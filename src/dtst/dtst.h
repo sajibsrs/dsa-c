@@ -145,5 +145,6 @@ void sgr_free(sgr_t *g);
 
 void sgr_dfs(const sgr_t *g, char start_vtx);
 void sgr_bfs(const sgr_t *g, char start_vtx);
+int sgr_has_cycle(const sgr_t *g);
 
 #endif

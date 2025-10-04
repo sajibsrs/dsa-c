@@ -84,7 +84,7 @@ void agr_bfs(const agr_t *g, char start_vertex) {
 }
 
 static int agr_cycle_util(const agr_t *g, int u, int *state) {
-    if (state[u] == 1) return 1; // cycle
+    if (state[u] == 1) return 1; // processing, cycle
     if (state[u] == 2) return 0; // finished, no recheck
 
     state[u] = 1; // processing
@@ -94,7 +94,7 @@ static int agr_cycle_util(const agr_t *g, int u, int *state) {
             if (agr_cycle_util(g, v, state)) return 1;
         }
     }
-    state[u] = 2; // child check finished
+    state[u] = 2; // check finished
     return 0;
 }
 
@@ -110,7 +110,7 @@ int agr_has_cycle(const agr_t *g) {
         }
     }
     __free(state);
-    return 0;
+    return 0; // no cycle
 }
 
 void agr_free(agr_t *g) {
@@ -222,6 +222,37 @@ void sgr_bfs(const sgr_t *g, char start_vtx) {
     }
     __free(queue);
     __free(visited);
+}
+
+static int sgr_cycle_util(const sgr_t *g, int u, int *state) {
+    if (state[u] == 1) return 1; // processing, cycle
+    if (state[u] == 2) return 0; // finished, no need to check
+
+    state[u] = 1; // processing
+
+    alnode_t *curr = g->alist[u];
+    while (curr) {
+        int v = curr->vindex;
+        if (sgr_cycle_util(g, v, state)) return 1;
+        curr = curr->next;
+    }
+    state[u] = 2; // finished
+    return 0;
+}
+
+int sgr_has_cycle(const sgr_t *g) {
+    int *state = __calloc(g->size, sizeof(int));
+
+    for (int i = 0; i < g->size; i++) {
+        if (state[i] == 0) {
+            if (sgr_cycle_util(g, i, state)) {
+                __free(state);
+                return 1; // cycle found
+            }
+        }
+    }
+    __free(state);
+    return 0; // no cycle
 }
 
 void sgr_print(const sgr_t *g) {
