@@ -3,11 +3,12 @@
 
 #include <stdlib.h>
 
-#define __free(ptr) _free((void **)&(ptr))
+#define _free(ptr) __free((void **)&(ptr))
 
-void *__malloc(size_t _size);
-void *__calloc(size_t _count, size_t _size);
-void _free(void **_ptr);
+void *_malloc(size_t size);
+void *_calloc(size_t count, size_t size);
+void *_realloc(void *ptr, size_t size);
+void __free(void **ptr);
 
 /**
  * @brief Prints bits in a byte.

@@ -1,22 +1,28 @@
-#include <stdio.h>
 #include "helper.h"
+#include <stdio.h>
 
-void *__malloc(size_t _size) {
-    void *ptr = malloc(_size);
+void *_malloc(size_t size) {
+    void *ptr = malloc(size);
     if (!ptr) exit(11);
     return ptr;
 }
 
-void *__calloc(size_t _count, size_t _size) {
-    void *ptr = calloc(_count, _size);
+void *_calloc(size_t count, size_t size) {
+    void *ptr = calloc(count, size);
     if (!ptr) exit(11);
     return ptr;
 }
 
-void _free(void **_ptr) {
-    if (_ptr && *_ptr) {
-        free(*_ptr);
-        *_ptr = NULL;
+void *_realloc(void *ptr, size_t size) {
+    void *rptr = realloc(ptr, size);
+    if (!rptr) exit(11);
+    return rptr;
+}
+
+void __free(void **ptr) {
+    if (ptr && *ptr) {
+        free(*ptr);
+        *ptr = NULL;
     }
 }
 
