@@ -35,7 +35,18 @@ list_t *list_new();
  * @param data Node data.
  */
 void list_ins(list_t *list, int data);
+
+/**
+ * @brief Removes a `node` based on value.
+ * @param list Linked list pointer.
+ * @param data Node data.
+ */
 void list_rem(list_t *list, int data);
+
+/**
+ * @brief Deallocates a `list` and it's `nodes`
+ * @param list Linked list pointer.
+ */
 void list_free(list_t *list);
 
 /**************************************************
