@@ -1,74 +1,69 @@
+#include "../src/dtst/dtst.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
-#include "../src/dtst/dtst.h"
-
-void destroy_int(void *data) {
-    free(data);
-}
 
 int main(void) {
-    slist_t list;
-    slist_init(&list, destroy_int);
+    // ---------- CREATE LIST ----------
+    list_t *list = list_new();
+    printf("✓ List created\n");
+    assert(list->head == NULL && list->size == 0);
 
-    // Test 1: Insert at head
+    // ---------- INSERT NODES ----------
     for (int i = 1; i <= 3; i++) {
-        int *val = malloc(sizeof(int));
-        *val = i * 10;
-        slist_head_ins(&list, val);
+        list_ins(list, i);
     }
+    printf("✓ Nodes inserted\n");
+    assert(list->size == 3);
+    assert(list->head->data == 3); // head should be last inserted
 
-    assert(list.size == 3);
-    assert(*(int *)list.head->data == 30); // Last inserted at head
-    assert(*(int *)list.tail->data == 10); // First inserted at tail
-    printf("✓ All inserts successful\n");
+    // ---------- REMOVE HEAD ----------
+    list_rem(list, 3);
+    printf("✓ Head removed\n");
+    assert(list->size == 2);
+    assert(list->head->data == 2);
 
-    // Test 2: Remove from tail
-    void *data;
-    slist_tail_rem(&list, &data);
-    assert(*(int *)data == 10);
-    assert(list.size == 2);
-    assert(*(int *)list.tail->data == 20); // New tail
-    free(data);
-    printf("✓ Tail removal works\n");
+    // ---------- REMOVE MIDDLE ----------
+    list_rem(list, 2);
+    printf("✓ Middle removed\n");
+    assert(list->size == 1);
+    assert(list->head->data == 1);
 
-    // Test 3: Remove another tail
-    slist_tail_rem(&list, &data);
-    assert(*(int *)data == 20);
-    assert(list.size == 1);
-    assert(*(int *)list.tail->data == 30); // Only one item left
-    assert(list.head == list.tail);        // Head and tail should be same
-    free(data);
-    printf("✓ Single item removal works\n");
+    // ---------- REMOVE LAST ----------
+    list_rem(list, 1);
+    printf("✓ Last removed\n");
+    assert(list->size == 0);
+    assert(list->head == NULL);
 
-    // Test 4: Remove last item (empty list)
-    slist_tail_rem(&list, &data);
-    assert(*(int *)data == 30);
-    assert(list.size == 0);
-    assert(list.head == NULL);
-    assert(list.tail == NULL);
-    free(data);
-    printf("✓ Empty list creation works\n");
+    // ---------- REMOVE NON-EXISTENT ----------
+    list_rem(list, 100); // should do nothing
+    printf("✓ Remove non-existent node passed\n");
+    assert(list->size == 0);
+    assert(list->head == NULL);
 
-    // Test 5: Remove from empty list (should fail)
-    assert(slist_tail_rem(&list, &data) == 0);
-    printf("✓ Empty list removal fails correctly\n");
+    // ---------- INSERT AFTER EMPTY ----------
+    list_ins(list, 42);
+    printf("✓ Insert after empty list\n");
+    assert(list->size == 1);
+    assert(list->head->data == 42);
 
-    // Test 6: Insert after empty
-    int *val = malloc(sizeof(int));
-    *val = 100;
-    slist_head_ins(&list, val);
-    assert(list.size == 1);
-    assert(*(int *)list.head->data == 100);
-    assert(list.head == list.tail);
-    printf("✓ Insert after empty works\n");
+    // ---------- REMOVE FROM SINGLE ELEMENT ----------
+    list_rem(list, 42);
+    printf("✓ Remove single element\n");
+    assert(list->size == 0);
+    assert(list->head == NULL);
 
-    // Cleanup
-    slist_rem(&list);
-    assert(list.size == 0);
-    assert(list.head == NULL);
-    assert(list.tail == NULL);
-    printf("✓ Complete cleanup successful\n");
+    // ---------- MULTIPLE INSERTS ----------
+    list_ins(list, 10);
+    list_ins(list, 20);
+    list_ins(list, 30);
+    printf("✓ Multiple inserts\n");
+    assert(list->size == 3);
+    assert(list->head->data == 30);
+
+    // ---------- CLEANUP ----------
+    list_free(list);
+    printf("✓ List freed successfully\n");
 
     printf("\nAll singly linked list tests passed! 🎉\n");
     return 0;
