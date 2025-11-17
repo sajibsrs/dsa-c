@@ -4,53 +4,52 @@
 #include <stddef.h>
 
 /**************************************************
- * - Linked list / Singly linked list
- *
- * It's a simple implementation of linked list.
- * Only the head is used for insertion and deletion.
+ * - Linked-lists
+ * -- Singly linked-list
+ * -- Doubly linked-list
  **************************************************/
 
-// Linked list node
+// Linked-list node
 typedef struct listn {
     int data;
     struct listn *next;
 } listn_t;
 
-// Linked list
+// Linked-list
 typedef struct {
     int size;
     listn_t *head;
 } list_t;
 
 /**
- * @brief Creates new linked list.
- * @return Linked list pointer.
+ * @brief Creates new linked-list.
+ * @return Linked-list pointer.
  */
 list_t *list_new();
 
 /**
  * @brief Creates new `node` from data and inserts
- * into the linked list.
- * @param list Linked list pointer.
+ * into the linked-list.
+ * @param list Linked-list pointer.
  * @param data Node data.
  */
 void list_ins(list_t *list, int data);
 
 /**
- * @brief Removes a `node` based on value.
- * @param list Linked list pointer.
+ * @brief Removes a `node` based on data.
+ * @param list Linked-list pointer.
  * @param data Node data.
  */
 void list_rem(list_t *list, int data);
 
 /**
  * @brief Deallocates a `list` and it's `nodes`
- * @param list Linked list pointer.
+ * @param list Linked-list pointer.
  */
 void list_free(list_t *list);
 
 /**************************************************
- * - Doubly linked list
+ * - Doubly linked-list
  **************************************************/
 
 typedef struct dlistn {
@@ -67,19 +66,57 @@ typedef struct {
 
 /**************************************************
  * - Stack
+ * -- Array implementation
+ * -- Linked-list implementation
  **************************************************/
 
+// Stack implementation with array.
 typedef struct {
-    int *arr;
-    int top;
     int size;
-} stck_t;
+    int top;
+    int *array;
+} astk_t;
 
-stck_t *stk_new(int size);
-int stk_push(stck_t *s, int elm);
-int stk_pop(stck_t *s);
-int stk_peek(stck_t *s);
-int stk_isempty(stck_t *s);
+/**
+ * @brief Create a new array-based stack.
+ * Allocates an astk_t structure and an internal array of the given size.
+ * The stack is initialized empty (top = -1).
+ * @param size  Initial capacity of the stack (number of integers it can hold).
+ * @return Pointer to the newly allocated stack, or exits on allocation failure.
+ */
+astk_t *astk_new(int size);
+
+/**
+ * @brief Push an integer onto the stack.
+ * If the stack is full, its capacity is automatically doubled using realloc.
+ * @param stack Pointer to the stack.
+ * @param data  Integer value to push.
+ */
+void astk_push(astk_t *stack, int data);
+
+/**
+ * @brief Pop the top integer from the stack.
+ * If the stack is empty, returns -1 as a sentinel value.
+ * @param stack Pointer to the stack.
+ * @return The popped value, or -1 if the stack was empty.
+ */
+int astk_pop(astk_t *stack);
+
+/**
+ * @brief Return the value at the top of the stack without removing it.
+ * Behavior is undefined if called on an empty stack (top == -1).
+ * @param stack Pointer to the stack.
+ * @return The value at the top of the stack.
+ */
+int astk_peek(astk_t *stack);
+
+/**
+ * @brief Free all memory associated with the stack.
+ * Frees the internal array and the stack structure itself.
+ * @param stack Pointer to the stack to be deallocated.
+ */
+void astk_free(astk_t *stack);
+
 
 /**************************************************
  * - Queue
@@ -121,9 +158,6 @@ void trie_free(trie_t *root);
  * - Graph
  **************************************************/
 
-/* - Array Implementation
- * ---------------------------------------------- */
-
 // Array based graph type
 typedef struct {
     char *vdata;
@@ -138,9 +172,6 @@ void agr_print(const agr_t *g);
 void agr_free(agr_t *g);
 
 int agr_has_cycle(const agr_t *g);
-
-/* - Sparse Graph Implementation
- * ---------------------------------------------- */
 
 // Adjacency list node type
 typedef struct alnode {

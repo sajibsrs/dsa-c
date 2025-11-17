@@ -1,39 +1,38 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "../helper.h"
 #include "dtst.h"
 
-stck_t *stack_new(int size) {
-    stck_t *new_stack = malloc(sizeof(stck_t));
-    new_stack->stack = malloc(size * sizeof(int));
-    new_stack->top = -1;
-    new_stack->size = size;
-    return new_stack;
+astk_t *astk_new(int size) {
+    astk_t *stack = _malloc(sizeof(astk_t));
+    stack->size = size;
+    stack->top = -1;
+    stack->array = _calloc(size, sizeof(int));
+
+    return stack;
 }
 
-void stack_push(stck_t *s, int elm) {
-    if (s->top == s->size - 1) {
-        printf("Stack is full\n");
-        return;
+void astk_push(astk_t *stack, int data) {
+    if (stack->top == stack->size - 1) {
+        stack->size *= 2;
+        stack->array = _realloc(stack->array, stack->size * sizeof(int));
     }
-    s->stack[++s->top] = elm;
+    stack->top++;
+    stack->array[stack->top] = data;
 }
 
-int stack_pop(stck_t *s) {
-    if (s->top == -1) {
-        printf("Stack is empty\n");
-        return -1;
+int astk_pop(astk_t *stack) {
+    int value = -1;
+    if (stack->top > -1) {
+        value = stack->array[stack->top];
+        stack->top--;
     }
-    return s->stack[s->top--];
+    return value;
 }
 
-int stack_peek(stck_t *s) {
-    if (s->top == -1) {
-        printf("Stack is empty\n");
-        return -1;
-    }
-    return s->stack[s->top];
+int astk_peek(astk_t *stack) {
+    return stack->array[stack->top];
 }
 
-int stack_is_empty(stck_t *s) {
-    return s->top == -1;
+void astk_free(astk_t *stack) {
+    _free(stack->array);
+    _free(stack);
 }
