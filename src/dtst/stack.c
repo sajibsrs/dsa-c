@@ -5,7 +5,7 @@ astk_t *astk_new(int size) {
     astk_t *stack = _malloc(sizeof(astk_t));
     stack->size = size;
     stack->top = -1;
-    stack->array = _calloc(size, sizeof(int));
+    stack->array = _malloc(size * sizeof(int));
 
     return stack;
 }
