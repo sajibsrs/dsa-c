@@ -20,12 +20,12 @@ void astk_push(astk_t *stack, int data) {
 }
 
 int astk_pop(astk_t *stack) {
-    int value = -1;
+    int data = -1;
     if (stack->top > -1) {
-        value = stack->array[stack->top];
+        data = stack->array[stack->top];
         stack->top--;
     }
-    return value;
+    return data;
 }
 
 int astk_peek(astk_t *stack) {
