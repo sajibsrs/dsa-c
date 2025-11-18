@@ -28,8 +28,7 @@ typedef struct {
 list_t *list_new();
 
 /**
- * @brief Creates new `node` from data and inserts
- * into the linked-list.
+ * @brief Creates new `node` from data and inserts into the linked-list.
  * @param list Linked-list pointer.
  * @param data Node data.
  */
@@ -79,16 +78,13 @@ typedef struct {
 
 /**
  * @brief Create a new array-based stack.
- * Allocates an astk_t structure and an internal array of the given size.
- * The stack is initialized empty (top = -1).
- * @param size  Initial capacity of the stack (number of integers it can hold).
- * @return Pointer to the newly allocated stack, or exits on allocation failure.
+ * @param size  Initial capacity of the stack.
+ * @return Pointer to the newly allocated stack.
  */
 astk_t *astk_new(int size);
 
 /**
  * @brief Push an integer onto the stack.
- * If the stack is full, its capacity is automatically doubled using realloc.
  * @param stack Pointer to the stack.
  * @param data  Integer value to push.
  */
@@ -96,7 +92,6 @@ void astk_push(astk_t *stack, int data);
 
 /**
  * @brief Pop the top integer from the stack.
- * If the stack is empty, returns -1 as a sentinel value.
  * @param stack Pointer to the stack.
  * @return The popped value, or -1 if the stack was empty.
  */
@@ -104,7 +99,6 @@ int astk_pop(astk_t *stack);
 
 /**
  * @brief Return the value at the top of the stack without removing it.
- * Behavior is undefined if called on an empty stack (top == -1).
  * @param stack Pointer to the stack.
  * @return The value at the top of the stack.
  */
@@ -112,31 +106,67 @@ int astk_peek(astk_t *stack);
 
 /**
  * @brief Free all memory associated with the stack.
- * Frees the internal array and the stack structure itself.
  * @param stack Pointer to the stack to be deallocated.
  */
 void astk_free(astk_t *stack);
 
+/**************************************************
+ * - Stack using linked-list
+ **************************************************/
+
+ // TODO:
 
 /**************************************************
  * - Queue
+ * -- Queue implemented with array
  **************************************************/
 
-#define QUEUE_SIZE 10
-
-// Queue type
+/** Queue implementation with array.
+ *
+ * As array based linear queue is wasteful, this implementation
+ * uses array based circular queue.
+ **/
 typedef struct {
-    int queue[QUEUE_SIZE];
+    int capacity;
     int front;
+    int back;
     int size;
-} que_t;
+    int *array;
+} aque_t;
 
-void que_enqueue(que_t *q, int elm);
-int que_dequeue(que_t *q);
-int que_peek(que_t *q);
-int que_isempty(que_t *q);
-int que_size(que_t *q);
-void que_print(que_t *q);
+/**
+ * @brief Creates new queue.
+ * @param capacity Total capacity of the queue.
+ * @return Pointer to the queue;
+ */
+aque_t *aque_new(int capacity);
+
+/**
+ * @brief Enqueues new data into the queue front.
+ * @param queue Pointer to the queue.
+ * @param data Data that being queued.
+ */
+void aque_enq(aque_t *queue, int data);
+
+/**
+ * @brief Dequeues data from the queue back.
+ * @param queue Pointer to the queue.
+ * @return
+ */
+int aque_deq(aque_t *queue);
+
+/**
+ * @brief Peeks/Reads the front of the queue.
+ * @param queue Pointer to the queue.
+ * @return Data stored at the queue front.
+ */
+int aque_peek(aque_t *queue);
+
+/**
+ * @brief Deallocates all memory allocated to queue.
+ * @param queue Pointer to the queue.
+ */
+void aque_free(aque_t *queue);
 
 /**************************************************
  * - Trie
