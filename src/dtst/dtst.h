@@ -114,7 +114,7 @@ void astk_free(astk_t *stack);
  * - Stack using linked-list
  **************************************************/
 
- // TODO:
+// TODO:
 
 /**************************************************
  * - Queue
@@ -174,15 +174,45 @@ void aque_free(aque_t *queue);
 
 #define TRIE_SIZE 26
 
-typedef struct trie {
-    int isend;
-    struct trie *child[TRIE_SIZE];
-} trie_t;
+// Trie node for 26 characters (a-z).
+typedef struct trien {
+    struct trien *cnodes[TRIE_SIZE];
+    int is_end;
+} trien_t;
 
-trie_t *trie_node_new(void);
-void trie_ins(trie_t *root, const char *word);
-int trie_find(trie_t *root, const char *word);
-void trie_free(trie_t *root);
+/**
+ * @brief Creates new trie node.
+ * @return Pointer to that node.
+ */
+trien_t *trien_new(void);
+
+/**
+ * @brief Inserts new word into the trie.
+ * @param root Trie root node.
+ * @param word Character string.
+ */
+void trie_ins(trien_t *root, const char *word);
+
+/**
+ * @brief Searches for word in trie.
+ * @param root Trie root node.
+ * @param word Character string.
+ * @return
+ */
+int trie_srch(trien_t *root, const char *word);
+
+/**
+ * @brief Removes a word from trie.
+ * @param root Trie root node.
+ * @param word Character string.
+ */
+void trie_rem(trien_t *root, const char *word);
+
+/**
+ * @brief Deallocates the memory for the trie.
+ * @param root Trie root node.
+ */
+void trie_free(trien_t *root);
 
 /**************************************************
  * - Graph
