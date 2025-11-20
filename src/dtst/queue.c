@@ -13,20 +13,7 @@ aque_t *aque_new(int capacity) {
 }
 
 void aque_enq(aque_t *queue, int data) {
-    if (queue->size == queue->capacity) {
-        int precap = queue->capacity;
-        queue->capacity *= 2;
-
-        int *newarr = _malloc(queue->capacity * sizeof(int));
-
-        for (int i = 0; i < queue->size; i++) {
-            newarr[i] = queue->array[(queue->front + i) % precap];
-        }
-        _free(queue->array);
-        queue->array = newarr;
-        queue->front = 0;
-        queue->back = queue->size - 1;
-    }
+    if (queue->size == queue->capacity) return;
     queue->back = (queue->back + 1) % queue->capacity;
     queue->array[queue->back] = data;
     queue->size++;
