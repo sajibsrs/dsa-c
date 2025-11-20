@@ -3,70 +3,59 @@
 #include <stdio.h>
 
 int main(void) {
-    printf("Testing array queue...\n");
+    printf("Testing fixed-size array queue...\n");
 
-    // Create queue
     aque_t *queue = aque_new(3);
     assert(queue->size == 0);
     assert(queue->front == 0);
     assert(queue->back == -1);
     printf("✓ Queue created\n");
 
-    // Simple enqueue
-    aque_enq(queue, 10);
-    aque_enq(queue, 20);
-    aque_enq(queue, 30);
+    // Fill queue
+    assert(aque_enq(queue, 10) == 1);
+    assert(aque_enq(queue, 20) == 1);
+    assert(aque_enq(queue, 30) == 1);
+
     assert(queue->size == 3);
-    assert(queue->front == 0);
-    assert(queue->back == 2);
     printf("✓ Enqueued 10, 20, 30\n");
 
-    // Trigger resize
-    aque_enq(queue, 40);
-    assert(queue->capacity >= 4);
-    assert(queue->size == 4);
-    assert(queue->front == 0);
-    assert(queue->back == 3);
-    printf("✓ Resize triggered and 40 enqueued\n");
+    // Enqueue when full → should fail
+    assert(aque_enq(queue, 40) == 0);
+    assert(queue->size == 3);
+    printf("✓ Enqueue on full returns 0\n");
 
     // Dequeue in order
-    int val = aque_deq(queue);
-    assert(val == 10);
-    val = aque_deq(queue);
-    assert(val == 20);
-    printf("✓ Dequeued values 10, 20\n");
+    assert(aque_deq(queue) == 10);
+    assert(aque_deq(queue) == 20);
+    printf("✓ Dequeued 10, 20\n");
 
-    // Wrap-around test
-    aque_enq(queue, 50);
-    aque_enq(queue, 60);
-    val = aque_deq(queue); // 30
-    assert(val == 30);
-    val = aque_deq(queue); // 40
-    assert(val == 40);
-    printf("✓ Wrap-around enqueue/dequeue works\n");
+    // Wrap-around works
+    assert(aque_enq(queue, 40) == 1);
+    assert(aque_enq(queue, 50) == 1);
+    printf("✓ Wrap-around enqueue works\n");
+
+    // Now queue is full again
+    assert(aque_enq(queue, 60) == 0);
+    printf("✓ Full queue detected again\n");
 
     // Dequeue remaining
-    val = aque_deq(queue);
-    assert(val == 50);
-    val = aque_deq(queue);
-    assert(val == 60);
-    printf("✓ Remaining elements dequeued\n");
+    assert(aque_deq(queue) == 30);
+    assert(aque_deq(queue) == 40);
+    assert(aque_deq(queue) == 50);
+    printf("✓ Remaining dequeued\n");
 
-    // Dequeue empty
-    val = aque_deq(queue);
-    assert(val == -1);
-    printf("✓ Dequeue on empty returns -1\n");
+    // Empty queue returns -1
+    assert(aque_deq(queue) == -1);
+    printf("✓ Dequeue empty returns -1\n");
 
-    // Enqueue after empty
-    aque_enq(queue, 70);
-    val = aque_deq(queue);
-    assert(val == 70);
+    // Works again after empty
+    assert(aque_enq(queue, 99) == 1);
+    assert(aque_deq(queue) == 99);
     printf("✓ Enqueue/dequeue after empty works\n");
 
-    // Clean up
     aque_free(queue);
-    printf("✓ Queue freed successfully\n");
+    printf("✓ Queue freed\n");
 
-    printf("\n🎉 All array queue tests passed!\n");
+    printf("\n🎉 All fixed-size queue tests passed!\n");
     return 0;
 }
