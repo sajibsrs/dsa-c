@@ -145,8 +145,9 @@ aque_t *aque_new(int capacity);
  * @brief Enqueues new data into the queue front.
  * @param queue Pointer to the queue.
  * @param data Data that being queued.
+ * @return 1 on success 0 on failure.
  */
-void aque_enq(aque_t *queue, int data);
+int aque_enq(aque_t *queue, int data);
 
 /**
  * @brief Dequeues data from the queue back.

@@ -12,11 +12,12 @@ aque_t *aque_new(int capacity) {
     return queue;
 }
 
-void aque_enq(aque_t *queue, int data) {
-    if (queue->size == queue->capacity) return;
+int aque_enq(aque_t *queue, int data) {
+    if (queue->size == queue->capacity) return 0;
     queue->back = (queue->back + 1) % queue->capacity;
     queue->array[queue->back] = data;
     queue->size++;
+    return 1;
 }
 
 int aque_deq(aque_t *queue) {
