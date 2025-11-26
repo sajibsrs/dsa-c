@@ -170,6 +170,56 @@ int aque_peek(aque_t *queue);
 void aque_free(aque_t *queue);
 
 /**************************************************
+ * - Trees
+ * -- Binary search tree
+ **************************************************/
+
+typedef struct bintrn {
+    int data;
+    struct bintrn *parent;
+    struct bintrn *left;
+    struct bintrn *right;
+} bintrn_t;
+
+/**
+ * @brief Creates new binary tree node.
+ * @param parent Parent node, or `NULL` if it's root node.
+ * @param value Integer value of the node.
+ * @return Pointer to the node.
+ */
+bintrn_t *bintrn_new(bintrn_t *parent, int value);
+
+/**
+ * @brief Creates new node with value and inserts into the tree.
+ * @param node Root/node under which the value should be inserted.
+ * @param value Value to be inserted.
+ * @return Pointer to the newly inserted node.
+ */
+bintrn_t *bintr_ins(bintrn_t *node, int value);
+
+/**
+ * @brief Remove node from tree by value.
+ * @param node Root/node to start from.
+ * @param value Value to be removed.
+ * @return Pointer to the subtree node where change occured.
+ */
+bintrn_t *bintr_rem(bintrn_t *node, int value);
+
+/**
+ * @brief Searches for a value in the tree.
+ * @param node Root/node to start from.
+ * @param value Value to look for.
+ * @return Pointer to the node.
+ */
+bintrn_t *bintr_srch(bintrn_t *node, int value);
+
+/**
+ * @brief Frees the allocated space for the whole tree.
+ * @param node Root node.
+ */
+void bintr_free(bintrn_t *node);
+
+/**************************************************
  * - Trie
  **************************************************/
 
