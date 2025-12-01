@@ -292,9 +292,9 @@ heap_t *heap_new(const int size);
 int heapmax_ins(heap_t *heap, int value);
 
 /**
- * @brief Removes top most number (root - which is first element of the array).
+ * @brief Removes topmost number (root - which is first element of the array).
  * @param heap Heap pointer (1-based).
- * @return 0 on success -1 on failure.
+ * @return Removed number on success, -1 on failure.
  */
 int heapmax_rem(heap_t *heap);
 
