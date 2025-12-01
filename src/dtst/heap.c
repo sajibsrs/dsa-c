@@ -92,6 +92,20 @@ heap_t *heapmax_heapify(int *arr, int size) {
     return heap;
 }
 
+void heapmax_asort(int *arr, int size) {
+    heap_t *heap = heap_new(size);
+    for (int i = 1; i <= size; i++) heapmax_ins(heap, arr[i]);
+    for (int i = size; i >= 1; i--) arr[i] = heapmax_rem(heap);
+    heap_free(heap);
+}
+
+void heapmax_dsort(int *arr, int size) {
+    heap_t *heap = heap_new(size);
+    for (int i = 1; i <= size; i++) heapmax_ins(heap, arr[i]);
+    for (int i = 1; i <= size; i++) arr[i] = heapmax_rem(heap);
+    heap_free(heap);
+}
+
 void heap_free(heap_t *heap) {
     _free(heap->array);
     _free(heap);

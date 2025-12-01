@@ -277,7 +277,7 @@ typedef struct {
 } heap_t;
 
 /**
- * @brief Creates new integer heap.
+ * @brief Creates new integer heap (1-based).
  * @param size Size of the heap array.
  * @return Pointer to the heap.
  */
@@ -305,6 +305,22 @@ int heapmax_rem(heap_t *heap);
  * @return Pointer to the heap.
  */
 heap_t *heapmax_heapify(int *arr, int size);
+
+/**
+ * @brief Sorts an array in ascending order.
+ * Creates heap from array first, then sorts. Time complexity `O(n log n)`.
+ * @param arr Unsorted array.
+ * @param size Length of the array.
+ */
+void heapmax_asort(int *arr, int size);
+
+/**
+ * @brief Sorts an array in descending order.
+ * Creates heap from array first, then sorts. Time complexity `O(n log n)`.
+ * @param arr Unsorted array.
+ * @param size Length of the array.
+ */
+void heapmax_dsort(int *arr, int size);
 
 /**
  * @brief Cleansup resources.
