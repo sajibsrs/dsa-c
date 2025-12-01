@@ -266,6 +266,53 @@ void trie_rem(trien_t *root, const char *word);
 void trie_free(trien_t *root);
 
 /**************************************************
+ * - Heap
+ * -- Max heap
+ **************************************************/
+
+typedef struct {
+    int *array;
+    int size; // Array size
+    int last; // Array last index
+} heap_t;
+
+/**
+ * @brief Creates new integer heap.
+ * @param size Size of the heap array.
+ * @return Pointer to the heap.
+ */
+heap_t *heap_new(const int size);
+
+/**
+ * @brief Inserts integer into heap.
+ * @param heap Heap pointer (1-based).
+ * @param value Integer value.
+ * @return 0 on success -1 on failure.
+ */
+int heapmax_ins(heap_t *heap, int value);
+
+/**
+ * @brief Removes top most number (root - which is first element of the array).
+ * @param heap Heap pointer (1-based).
+ * @return 0 on success -1 on failure.
+ */
+int heapmax_rem(heap_t *heap);
+
+/**
+ * @brief Takes an array and returns max heap (1-based).
+ * @param arr Array that needs to be heapified.
+ * @param len Length of the array
+ * @return Pointer to the heap.
+ */
+heap_t *heapmax_heapify(int *arr, int len);
+
+/**
+ * @brief Cleansup resources.
+ * @param heap
+ */
+void heap_free(heap_t *heap);
+
+/**************************************************
  * - Graph
  **************************************************/
 
