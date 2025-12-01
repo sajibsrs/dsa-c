@@ -301,10 +301,10 @@ int heapmax_rem(heap_t *heap);
 /**
  * @brief Takes an array and returns max heap (1-based).
  * @param arr Array that needs to be heapified.
- * @param len Length of the array
+ * @param size Length of the array
  * @return Pointer to the heap.
  */
-heap_t *heapmax_heapify(int *arr, int len);
+heap_t *heapmax_heapify(int *arr, int size);
 
 /**
  * @brief Cleansup resources.

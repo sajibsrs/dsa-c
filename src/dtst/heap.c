@@ -59,25 +59,25 @@ int heapmax_rem(heap_t *heap) {
     return max;
 }
 
-heap_t *heapmax_heapify(int *arr, int len) {
-    heap_t *heap = heap_new(len); // allocates len+1 internally
-    heap->last = len;
+heap_t *heapmax_heapify(int *arr, int size) {
+    heap_t *heap = heap_new(size); // allocates size+1 internally
+    heap->last = size;
 
     // Copy elements (1-based)
-    for (int i = 1; i <= len; i++) {
+    for (int i = 1; i <= size; i++) {
         heap->array[i] = arr[i];
     }
 
     // Heapify
-    for (int i = len / 2; i >= 1; i--) {
+    for (int i = size / 2; i >= 1; i--) {
         int idx = i;
         while (1) {
             int parent = idx;
             int left = 2 * idx;
             int right = 2 * idx + 1;
 
-            if (left <= len && heap->array[left] > heap->array[parent]) parent = left;
-            if (right <= len && heap->array[right] > heap->array[parent]) parent = right;
+            if (left <= size && heap->array[left] > heap->array[parent]) parent = left;
+            if (right <= size && heap->array[right] > heap->array[parent]) parent = right;
 
             if (idx == parent) break;
 
