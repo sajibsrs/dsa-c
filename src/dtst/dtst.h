@@ -308,7 +308,10 @@ heap_t *heapmax_heapify(int *arr, int size);
 
 /**
  * @brief Sorts an array in ascending order.
+ *
  * Creates heap from array first, then sorts. Time complexity `O(n log n)`.
+ * Better alternative exists with `O(n)` with direct implementation.
+ *
  * @param arr Unsorted array.
  * @param size Length of the array.
  */
@@ -316,7 +319,10 @@ void heapmax_asort(int *arr, int size);
 
 /**
  * @brief Sorts an array in descending order.
+ *
  * Creates heap from array first, then sorts. Time complexity `O(n log n)`.
+ * Better alternative exists with `O(n)` with direct implementation.
+ *
  * @param arr Unsorted array.
  * @param size Length of the array.
  */
