@@ -110,9 +110,9 @@ int astk_peek(astk_t *stack);
  */
 void astk_free(astk_t *stack);
 
-/**************************************************
+/*------------------------------------------------*
  * - Stack using linked-list
- **************************************************/
+ *------------------------------------------------*/
 
 // TODO:
 
@@ -267,7 +267,9 @@ void trie_free(trien_t *root);
 
 /**************************************************
  * - Heap
- * -- Max heap
+ * -- Ma-heap
+ * -- Min-heap (TODO)
+ * -- Priority queue
  **************************************************/
 
 typedef struct {
@@ -333,6 +335,44 @@ void heapmax_dsort(int *arr, int size);
  * @param heap
  */
 void heap_free(heap_t *heap);
+
+/*------------------------------------------------*
+ * - Priority queue
+ *------------------------------------------------*/
+
+typedef struct {
+    int prio; // Data priority
+    void *data;
+} pqelem_t;
+
+typedef struct {
+    pqelem_t *heap;
+    int size;
+    int cap; // Queue capacity
+} pqueue_t;
+
+/**
+ * @brief Creates new priority queue.
+ * @param cap Capacity of the queue.
+ * @return Pointer to the queue.
+ */
+pqueue_t *pqueue_new(int cap);
+
+/**
+ * @brief Adds new element to the end of the priority queue.
+ * @param pq Pointer to the priority queue.
+ * @param data Data to be stored in priority queue.
+ * @param prio Priority of the data.
+ * @return 0 on success, -2 when queue is full.
+ */
+int pqueue_push(pqueue_t *pq, void *data, int prio);
+
+/**
+ * @brief Removes an element from the front of the queue.
+ * @param pq Pointer to the priority queue.
+ * @return
+ */
+void *pqueue_pop(pqueue_t *pq);
 
 /**************************************************
  * - Graph
