@@ -53,14 +53,12 @@ void list_free(list_t *list);
 
 typedef struct dlistn {
     void *data;
-    struct dlistn *prev;
-    struct dlistn *next;
+    struct dlistn *prev, *next;
 } dlistn_t;
 
 typedef struct {
     int size;
-    dlistn_t *head;
-    dlistn_t *tail;
+    dlistn_t *head, *tail;
 } dlist_t;
 
 /**************************************************
@@ -127,11 +125,7 @@ void astk_free(astk_t *stack);
  * uses array based circular queue.
  **/
 typedef struct {
-    int capacity;
-    int front;
-    int back;
-    int size;
-    int *array;
+    int capacity, front, back, size, *array;
 } aque_t;
 
 /**
@@ -174,12 +168,10 @@ void aque_free(aque_t *queue);
  * -- Binary search tree
  **************************************************/
 
-typedef struct bintrn {
+typedef struct bstn {
     int data;
-    struct bintrn *parent;
-    struct bintrn *left;
-    struct bintrn *right;
-} bintrn_t;
+    struct bstn *parent, *left, *right;
+} btsn_t;
 
 /**
  * @brief Creates new binary tree node.
@@ -187,7 +179,7 @@ typedef struct bintrn {
  * @param value Integer value of the node.
  * @return Pointer to the node.
  */
-bintrn_t *bintrn_new(bintrn_t *parent, int value);
+btsn_t *btsn_new(btsn_t *parent, int value);
 
 /**
  * @brief Creates new node with value and inserts into the tree.
@@ -195,7 +187,7 @@ bintrn_t *bintrn_new(bintrn_t *parent, int value);
  * @param value Value to be inserted.
  * @return Pointer to the newly inserted node.
  */
-bintrn_t *bintr_ins(bintrn_t *node, int value);
+btsn_t *bts_ins(btsn_t *node, int value);
 
 /**
  * @brief Remove node from tree by value.
@@ -203,7 +195,7 @@ bintrn_t *bintr_ins(bintrn_t *node, int value);
  * @param value Value to be removed.
  * @return Pointer to the subtree node where change occured.
  */
-bintrn_t *bintr_rem(bintrn_t *node, int value);
+btsn_t *bts_rem(btsn_t *node, int value);
 
 /**
  * @brief Searches for a value in the tree.
@@ -211,13 +203,13 @@ bintrn_t *bintr_rem(bintrn_t *node, int value);
  * @param value Value to look for.
  * @return Pointer to the node.
  */
-bintrn_t *bintr_srch(bintrn_t *node, int value);
+btsn_t *bts_srch(btsn_t *node, int value);
 
 /**
  * @brief Frees the allocated space for the whole tree.
  * @param node Root node.
  */
-void bintr_free(bintrn_t *node);
+void bts_free(btsn_t *node);
 
 /**************************************************
  * - Trie
