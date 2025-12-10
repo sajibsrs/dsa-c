@@ -39,6 +39,9 @@ target_include_directories(queue_test PRIVATE src)
 add_executable(dijkstra_test tests/dijkstra_test.c ${LIB_SRC})
 target_include_directories(dijkstra_test PRIVATE src)
 
+add_executable(huffman_test tests/huffman_test.c ${LIB_SRC})
+target_include_directories(huffman_test PRIVATE src)
+
 # Registers tests
 add_test(NAME search_test COMMAND search_test)
 add_test(NAME list_test COMMAND list_test)
@@ -50,3 +53,4 @@ add_test(NAME agr_test COMMAND agr_test)
 add_test(NAME sgr_test COMMAND sgr_test)
 add_test(NAME queue_test COMMAND queue_test)
 add_test(NAME dijkstra_test COMMAND dijkstra_test)
+add_test(NAME huffman_test COMMAND huffman_test)
