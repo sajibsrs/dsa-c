@@ -24,6 +24,12 @@ target_include_directories(tree_test PRIVATE src)
 add_executable(heap_test tests/heap_test.c ${LIB_SRC})
 target_include_directories(heap_test PRIVATE src)
 
+add_executable(pqueue_test tests/pqueue_test.c ${LIB_SRC})
+target_include_directories(pqueue_test PRIVATE src)
+
+add_executable(grid_test tests/grid_test.c ${LIB_SRC})
+target_include_directories(grid_test PRIVATE src)
+
 add_executable(trie_test tests/trie_test.c ${LIB_SRC})
 target_include_directories(trie_test PRIVATE src)
 
@@ -48,6 +54,8 @@ add_test(NAME list_test COMMAND list_test)
 add_test(NAME stack_test COMMAND stack_test)
 add_test(NAME tree_test COMMAND tree_test)
 add_test(NAME heap_test COMMAND heap_test)
+add_test(NAME pqueue_test COMMAND pqueue_test)
+add_test(NAME grid_test COMMAND grid_test)
 add_test(NAME trie_test COMMAND trie_test)
 add_test(NAME agr_test COMMAND agr_test)
 add_test(NAME sgr_test COMMAND sgr_test)
