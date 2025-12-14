@@ -3,11 +3,11 @@
 
 #include <stddef.h>
 
-/**************************************************
+/******************************************************************************
  * - Linked-lists
  * -- Singly linked-list
  * -- Doubly linked-list
- **************************************************/
+ ******************************************************************************/
 
 // Linked-list node
 typedef struct listn {
@@ -47,9 +47,9 @@ void list_rem(list_t *list, int data);
  */
 void list_free(list_t *list);
 
-/**************************************************
+/******************************************************************************
  * - Doubly linked-list
- **************************************************/
+ ******************************************************************************/
 
 typedef struct dlistn {
     void *data;
@@ -61,11 +61,11 @@ typedef struct {
     dlistn_t *head, *tail;
 } dlist_t;
 
-/**************************************************
+/******************************************************************************
  * - Stack
  * -- Array implementation
  * -- Linked-list implementation
- **************************************************/
+ ******************************************************************************/
 
 // Stack implementation with array.
 typedef struct {
@@ -108,16 +108,16 @@ int astk_peek(astk_t *stack);
  */
 void astk_free(astk_t *stack);
 
-/*------------------------------------------------*
+/*----------------------------------------------------------------------------*
  * - Stack using linked-list
- *------------------------------------------------*/
+ *----------------------------------------------------------------------------*/
 
 // TODO:
 
-/**************************************************
+/******************************************************************************
  * - Queue
  * -- Queue implemented with array
- **************************************************/
+ ******************************************************************************/
 
 /** Queue implementation with array.
  *
@@ -163,10 +163,10 @@ int aque_peek(aque_t *queue);
  */
 void aque_free(aque_t *queue);
 
-/**************************************************
+/******************************************************************************
  * - Trees
  * -- Binary search tree
- **************************************************/
+ ******************************************************************************/
 
 typedef struct bstn {
     int data;
@@ -211,9 +211,9 @@ btsn_t *bts_srch(btsn_t *node, int value);
  */
 void bts_free(btsn_t *node);
 
-/**************************************************
+/******************************************************************************
  * - Trie
- **************************************************/
+ ******************************************************************************/
 
 #define TRIE_SIZE 26
 
@@ -257,12 +257,12 @@ void trie_rem(trien_t *root, const char *word);
  */
 void trie_free(trien_t *root);
 
-/**************************************************
+/******************************************************************************
  * - Heap
  * -- Ma-heap
  * -- Min-heap (TODO)
  * -- Priority queue
- **************************************************/
+ ******************************************************************************/
 
 typedef struct {
     int *array;
@@ -328,27 +328,29 @@ void heapmax_dsort(int *arr, int size);
  */
 void heap_free(heap_t *heap);
 
-/*------------------------------------------------*
+/*-----------------------------------------------------------------------------*
  * - Priority queue
- *------------------------------------------------*/
+ *-----------------------------------------------------------------------------*/
 
+// Priority queue node type
 typedef struct {
     int prio; // Data priority
     void *data;
-} pqelem_t;
+} pquen_t;
 
+// Priority queue type
 typedef struct {
-    pqelem_t *heap;
+    pquen_t *heap;
     int size;
     int cap; // Queue capacity
-} pqueue_t;
+} pque_t;
 
 /**
  * @brief Creates new priority queue.
  * @param cap Capacity of the queue.
  * @return Pointer to the queue.
  */
-pqueue_t *pqueue_new(int cap);
+pque_t *pque_new(int cap);
 
 /**
  * @brief Adds new element to the end of the priority queue.
@@ -357,54 +359,161 @@ pqueue_t *pqueue_new(int cap);
  * @param prio Priority of the data.
  * @return 0 on success, -2 when queue is full.
  */
-int pqueue_push(pqueue_t *pq, void *data, int prio);
+int pque_push(pque_t *pq, void *data, int prio);
 
 /**
  * @brief Removes an element from the front of the queue.
  * @param pq Pointer to the priority queue.
  * @return
  */
-void *pqueue_pop(pqueue_t *pq);
+void *pque_pop(pque_t *pq);
 
-/**************************************************
- * - Graph
- **************************************************/
+/******************************************************************************
+ * - Grid
+ ******************************************************************************/
 
-// Array based graph type
 typedef struct {
-    char *vdata;
-    int **adjmat;
+    float x, y;
+} point_t;
+
+typedef struct {
+    int rows;
+    int cols;
+    point_t origin; // top-left corner of the grid
+    float cwidth;   // cell width
+    float cheight;  // cell height
+    char *data;     // contiguous memory [rows * cols]
+} grid_t;
+
+/**
+ * @brief Create a new uniform 2D grid.
+ * @param rows    Number of rows in the grid.
+ * @param cols    Number of columns in the grid.
+ * @param origin  The top-left corner position of the grid in world coordinates.
+ * @param cwidth  Width of each cell.
+ * @param cheight Height of each cell.
+ * @return        Pointer to the grid.
+ */
+grid_t *grid_new(int rows, int cols, point_t origin, float cwidth, float cheight);
+
+/**
+ * @brief Check if a given row and column are within the grid bounds.
+ * @param grid Pointer to the grid.
+ * @param row  Row index to check.
+ * @param col  Column index to check.
+ * @return     Non-zero if valid, zero if out of bounds or grid is NULL.
+ */
+int grid_isvalid(const grid_t *grid, int row, int col);
+
+/**
+ * @brief Set a value at a specific cell in the grid.
+ * @param grid Pointer to the grid.
+ * @param row  Row index of the cell.
+ * @param col  Column index of the cell.
+ * @param val  Value to set.
+ * @return     Non-zero on success, zero if invalid coordinates.
+ */
+int grid_set(grid_t *grid, int row, int col, char val);
+
+/**
+ * @brief Get the value at a specific cell in the grid.
+ * @param grid Pointer to the grid.
+ * @param row  Row index of the cell.
+ * @param col  Column index of the cell.
+ * @return     The value at the cell, or 0 if the coordinates are invalid.
+ */
+char grid_get(const grid_t *grid, int row, int col);
+
+/**
+ * @brief Find the first occurrence of a value in the grid.
+ * @param grid Pointer to the grid.
+ * @param targ Target value to search for.
+ * @return     Linear index (row * cols + col) of the first matching cell,
+ *             or -1 if the value is not found.
+ */
+int grid_find(const grid_t *grid, char targ);
+
+/**
+ * @brief Find the nearest cell center to a given point.
+ * @param grid Pointer to the grid.
+ * @param pt   Target point in world coordinates.
+ * @return     Linear index of the nearest cell, or -1 if grid is NULL.
+ *
+ * Note: This performs a linear search over all cells (O(rows * cols)).
+ */
+int grid_nearest(const grid_t *grid, point_t pt);
+
+/**
+ * @brief Find the nearest cell center to a given point using expanding ring search.
+ * @param grid   Pointer to the grid.
+ * @param pt     Target point in world coordinates.
+ * @param radius Maximum radius (in cells) to search from the initial cell.
+ * @return       Linear index of the nearest cell, or -1 if the point is outside the grid
+ *               or no cell is found within the given radius.
+ *
+ * Note: This function starts from the cell containing the point and expands outward in
+ *       concentric rings, checking only cells on the current ring.
+ *
+ * Time Complexity: O(min(rows*cols, R^2)), where R is the input radius.
+ *                 In practice, for small radius R, the search is very fast.
+ */
+int grid_nearexp(const grid_t *grid, point_t pt, int radius);
+
+/**
+ * @brief Free all memory associated with a grid.
+ * @param grid Pointer to the grid to free. Safe to pass NULL.
+ */
+void grid_free(grid_t *grid);
+
+/**
+ * @brief Print the grid to stdout for debugging. Empty cells are displayed as '.'.
+ * @param grid Pointer to the grid.
+ */
+void grid_print(const grid_t *grid);
+
+/******************************************************************************
+ * - Graph
+ * -- Array based graph
+ * -- Linked-list based graph
+ ******************************************************************************/
+
+// Adjacency matrix based graph type
+typedef struct {
+    char *data;  // vtx data
+    int **nodes; // adjacency matrix
     int size;
-} agr_t;
+} amgr_t;
 
-agr_t *agr_new(int size);
-void agr_edge_new(agr_t *g, int u, int v, int weight);
-void agr_vdata_set(agr_t *g, int vertex, char data);
-void agr_print(const agr_t *g);
-void agr_free(agr_t *g);
+amgr_t *amgr_new(int size);
+void amgr_edge_new(amgr_t *graph, int u, int v, int weight);
+void amgr_vdata_set(amgr_t *graph, int vtx, char data);
+int amgr_has_cycle(const amgr_t *graph);
+void amgr_free(amgr_t *graph);
+void amgr_print(const amgr_t *graph);
 
-int agr_has_cycle(const agr_t *g);
+/*-----------------------------------------------------------------------------
+ * - Linked-list based graph
+ *-----------------------------------------------------------------------------*/
 
 // Adjacency list node type
-typedef struct alnode {
-    int vindex;
-    int weight;
-    struct alnode *next;
-} alnode_t;
+typedef struct adlistn {
+    int idx;    // vtx index
+    int weight; // edge weight
+    struct adlistn *next;
+} adlistn_t;
 
-// Sparse graph type
+// Adjacency list based graph type
 typedef struct {
-    char *vdata;
-    alnode_t **alist;
+    char *data;        // vtx data
+    adlistn_t **nodes; // Adjacency list
     int size;
-} sgr_t;
+} algr_t;
 
-sgr_t *sgr_new(int size);
-void sgr_edge_new(sgr_t *g, int u, int v, int weight);
-void sgr_vdata_set(sgr_t *g, int vindex, char data);
-void sgr_print(const sgr_t *g);
-void sgr_free(sgr_t *g);
-
-int sgr_has_cycle(const sgr_t *g);
+algr_t *algr_new(int size);
+void algr_edge_new(algr_t *graph, int u, int v, int weight);
+void algr_vdata_set(algr_t *graph, int idx, char data);
+int algr_has_cycle(const algr_t *graph);
+void algr_free(algr_t *graph);
+void algr_print(const algr_t *graph);
 
 #endif
