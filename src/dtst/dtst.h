@@ -472,6 +472,96 @@ void grid_free(grid_t *grid);
 void grid_print(const grid_t *grid);
 
 /******************************************************************************
+ * - Quadtree
+ ******************************************************************************/
+
+typedef struct {
+    float x, y;
+    float w, h;
+} rect_t;
+
+typedef struct qtreen {
+    rect_t bounds;
+    point_t *points;
+    int count;
+    int capacity;
+    int leaf;
+
+    struct qtreen *nw, *ne, *sw, *se;
+} qtreen_t;
+
+/**
+ * @brief Checks whether a point lies inside or on the boundary of a rectangle.
+ * @param rect  Rectangle to test against
+ * @param pt    Point to test
+ * @return      Non-zero if point is inside rect, 0 otherwise
+ */
+int rect_haspoint(rect_t rect, point_t pt);
+
+/**
+ * @brief Checks whether two rectangles overlap or touch.
+ * @param a     First rectangle
+ * @param b     Second rectangle
+ * @return      Non-zero if rectangles intersect, 0 otherwise
+ */
+int rect_intersects(rect_t a, rect_t b);
+
+/**
+ * @brief Creates a new quadtree node covering the given bounds.
+ * @param bounds    Axis-aligned region this node represents
+ * @param capacity  Maximum number of points before subdivision
+ * @return          Pointer to newly allocated quadtree node, or NULL on failure
+ */
+qtreen_t *qtree_create(rect_t bounds, int capacity);
+
+/**
+ * @brief Inserts a point into the quadtree.
+ * The point must lie within the node's bounds.
+ * If capacity is exceeded, the node subdivides automatically.
+ *
+ * @param qt    Quadtree node
+ * @param pt    Point to insert
+ * @return      Non-zero on success, 0 if point is out of bounds or insertion fails
+ */
+int qtree_insert(qtreen_t *qt, point_t pt);
+
+/**
+ * @brief Subdivides a quadtree node into four children.
+ * This allocates child nodes and redistributes existing points.
+ * Should only be called once per node.
+ *
+ * @param qt    Quadtree node to subdivide
+ */
+void qtree_subdiv(qtreen_t *qt);
+
+/**
+ * @brief Queries all points within a rectangular range.
+ * Points are written into the output array up to the given maximum.
+ *
+ * @param qt        Quadtree node
+ * @param range     Query rectangle
+ * @param out       Output array for points
+ * @param omax      Maximum number of points to write
+ * @param ocount    Output count of points written
+ * @return          Number of points found (may exceed omax)
+ */
+int qtree_query(qtreen_t *qt, rect_t range, point_t *out, int omax, int *ocount);
+
+/**
+ * @brief Frees a quadtree and all of its descendants.
+ * @param qt    Quadtree node to free
+ */
+void qtree_free(qtreen_t *qt);
+
+/**
+ * @brief Draws or visualizes the quadtree for debugging or inspection.
+ * @param qt        Quadtree node
+ * @param depth     Current depth in the tree
+ * @param label     Optional label for display or logging
+ */
+void qtree_draw(qtreen_t *qt, int depth, const char *label);
+
+/******************************************************************************
  * - Graph
  * -- Array based graph
  * -- Linked-list based graph
